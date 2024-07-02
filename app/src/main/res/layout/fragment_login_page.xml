@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_color"
+    tools:context=".login.LoginPageFragment">
+
+    <ImageView
+        android:id="@+id/app_icon"
+        android:layout_width="146dp"
+        android:layout_height="146dp"
+        android:layout_marginTop="187dp"
+        android:layout_marginBottom="324dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/profile_picture" />
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/logincardview"
+        android:layout_width="350dp"
+        android:layout_height="54dp"
+        android:layout_marginBottom="120dp"
+        app:cardElevation="4dp"
+        android:outlineAmbientShadowColor="@color/black"
+        app:cardBackgroundColor="@color/google_button"
+        app:cardCornerRadius="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <ImageView
+            android:layout_width="42dp"
+            android:layout_height="42dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="12dp"
+            app:srcCompat="@drawable/ic_google_contained" />
+
+        <Button
+            android:id="@+id/btn_google_ile_giris"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/transparent"
+            android:fontFamily="@font/kanit_regular"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:text="@string/btn_google"
+            android:textAlignment="center"
+            android:textColor="@color/white" />
+
+    </androidx.cardview.widget.CardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

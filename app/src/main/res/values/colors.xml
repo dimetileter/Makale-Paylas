@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="background_color">#111111</color>
+    <color name="outline">#DDDDDD</color>
+    <color name="light_view_item">#545454</color>
+    <color name="fun_buttons">#282828</color>
+    <color name="nav_buttons">#3A3A3A</color>
+    <color name="google_button">#2480C3</color>
+    <color name="next_button">#2D2751</color>
+    <color name="download_icon">#3CAC20</color>
+    <color name="search_icon">#A5E3EC</color>
+    <color name="add_icon">#E7C1A6</color>
+    <color name="exit_button">#781010</color>
+</resources>

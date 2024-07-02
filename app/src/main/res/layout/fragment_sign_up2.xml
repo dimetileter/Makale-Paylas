@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_color"
+    tools:context=".login.SignUp2Fragment">
+
+    <ImageView
+        android:id="@+id/login_profile_picture"
+        android:layout_width="146dp"
+        android:layout_height="146dp"
+        android:layout_marginTop="133dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/profile_picture" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:fontFamily="@font/inria_serif_regular"
+        android:text="@string/istege_gore_profil_resmi_seciniz"
+        android:textColor="@color/white"
+        android:textSize="15sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/login_profile_picture" />
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="110dp"
+        android:fontFamily="@font/inria_serif_regular"
+        android:text="@string/paylasım_yapacak_mısınız"
+        android:textColor="@color/white"
+        android:textSize="15sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardView2"
+        android:layout_width="146dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="105dp"
+        android:layout_marginEnd="30dp"
+        app:cardBackgroundColor="@color/light_view_item"
+        app:cardCornerRadius="35dp"
+        app:cardElevation="4dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView">
+
+        <RadioGroup
+            android:id="@+id/radiogroup"
+            android:layout_width="146dp"
+            android:layout_height="30dp"
+            android:orientation="horizontal"
+            tools:layout_editor_absoluteX="236dp"
+            tools:layout_editor_absoluteY="417dp">
+
+            <RadioButton
+                android:id="@+id/radio_button_evet"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="11dp"
+                android:button="@drawable/custom_radio_button"
+                android:fontFamily="@font/kanit_regular"
+                android:layoutDirection="rtl"
+                android:paddingStart="10dp"
+                android:paddingLeft="11dp"
+                android:text="@string/evet"
+                android:textColor="@color/white"
+                android:textSize="15sp" />
+
+            <RadioButton
+                android:id="@+id/radio_button_hayir"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="11dp"
+                android:button="@drawable/custom_radio_button"
+                android:fontFamily="@font/kanit_regular"
+                android:layoutDirection="rtl"
+                android:paddingStart="10dp"
+                android:text="@string/hayir"
+                android:textColor="@color/white"
+                android:textSize="15sp" />
+        </RadioGroup>
+    </androidx.cardview.widget.CardView>
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:fontFamily="@font/inria_serif_regular"
+        android:text="@string/dogrulama_kodu"
+        android:textColor="@color/white"
+        android:textSize="15sp"
+        app:layout_constraintBottom_toTopOf="@+id/txt_name"
+        app:layout_constraintStart_toStartOf="@+id/txt_name" />
+
+    <EditText
+        android:id="@+id/txt_name"
+        android:layout_width="350dp"
+        android:layout_height="54dp"
+        android:layout_marginTop="85dp"
+        android:background="@drawable/light_view_item"
+        android:elevation="4dp"
+        android:fontFamily="@font/inria_serif_regular"
+        android:inputType="number|numberSigned"
+        android:maxLength="35"
+        android:paddingStart="15dp"
+        android:textColor="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.491"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cardView2" />
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="107dp"
+        android:layout_height="38dp"
+        android:layout_marginTop="40dp"
+        app:cardBackgroundColor="@color/next_button"
+        app:cardCornerRadius="10dp"
+        app:cardElevation="4dp"
+        app:layout_constraintEnd_toEndOf="@+id/txt_name"
+        app:layout_constraintTop_toBottomOf="@+id/txt_name">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="79dp"
+            app:srcCompat="@drawable/ic_arrow" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="5dp"
+            android:background="@android:color/transparent"
+            android:fontFamily="@font/kanit_regular"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:text="@string/sonraki"
+            android:textAlignment="viewStart"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="16sp" />
+    </androidx.cardview.widget.CardView>
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
+        android:layout_marginBottom="32dp"
+        android:fontFamily="@font/inria_serif_regular"
+        android:text="@string/bu_bilgiye_neden_ihtiyacimiz_var"
+        android:textColor="@color/white"
+        android:textSize="15sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

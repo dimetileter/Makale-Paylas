@@ -1,0 +1,37 @@
+<resources>
+    <string name="app_name">Makale Paylas</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="btn_google">GOOGLE İLE DEVAM ET</string>
+    <string name="istege_gore_profil_resmi_seciniz">İsteğe göre profil resmi seçiniz*</string>
+    <string name="profil_resmi_degisim">Profil resmi daha sonra değiştirilebilir.</string>
+    <string name="bu_bilgiye_neden_ihtiyacimiz_var">Bu bilgiye neden ihtiyacımız var?</string>
+    <string name="isim_soyisim">İsim-soyisim</string>
+    <string name="kullanici_adi">Kullanıcı Adı</string>
+    <string name="dogum_tarihi">Doğum tarihi</string>
+    <string name="sonraki">Sonraki</string>
+    <string name="paylasım_yapacak_mısınız">Paylaşım yapacak mısınız?</string>
+    <string name="dogrulama_kodu">Doğrulama kodunu giriniz</string>
+    <string name="evet">Evet</string>
+    <string name="hayir">Hayır</string>
+    <string name="indir">İNDİR</string>
+    <string name="paylas">Paylaş</string>
+    <string name="makale_basligi">Makale Başlığı</string>
+    <string name="yazar_isim_soyad">Yazar: İsim Soyad</string>
+    <string name="ornek_tarih">24.06.2024</string>
+    <string name="hint_makale_ismi">Makale ismi</string>
+    <string name="hint_makale_aciklamasi">Açıklama...</string>
+    <string name="ornek_makale_ismi">Planck Sabiti Hakkında</string>
+    <string name="ornek_yazar_ismi">Dimetileter</string>
+    <string name="kullanici_ismini_degistir">Kullanıcı ismini değiştir</string>"
+    <string name="profil_resmini_degistir">Profil resmini değiştir</string>
+    <string name="koyu_mod">Koyu Mod</string>
+    <string name="cikis">Çıkış</string>
+    <string name="kaydedilenler">Kaydedilenler</string>
+    <string name="ornek">Enerjinin frekans ile çarpımı, Planck sabitiyle (h) çarpılarak bulunur. Yani, E = h * f formülünde, E enerjiyi, h Planck sabitini ve f ise frekansı temsil eder.
+
+Bu formül, bir fotonun enerjisinin frekansı ile doğru orantılı olduğunu gösterir. Yani, bir fotonun frekansı arttıkça, onun enerjisi de artar. Bu da klasik fiziğin dalga kuramıyla uyumlu bir şekilde düşünülebilir, çünkü frekans arttıkça dalga boyu kısalır ve enerji yoğunluğu artar.
+
+Ancak, E/f olarak ifade edilen bir değer Planck sabiti değildir. Planck sabiti (h), enerji ve frekans arasındaki ilişkiyi ifade eder, ancak sadece bir fotonun enerjisiyle değil. Bu nedenle, E/f olarak ifade edilen bir değer, Planck sabiti olarak kabul edilemez.
+
+Planck sabiti (h), temel bir doğal sabit olup, enerji ve frekans arasındaki ilişkiyi tanımlar. Ancak, sadece enerji birimi değil, enerji ve frekans arasındaki ilişkiyi temsil eden bir katsayıdır. Bu nedenle, Planck sabiti (h) ile frekansı bölerek doğrudan enerji birimini elde edemeyiz.</string>
+</resources>
