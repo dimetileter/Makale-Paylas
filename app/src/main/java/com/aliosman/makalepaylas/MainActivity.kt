@@ -6,6 +6,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.navigation.NavController
@@ -13,12 +14,18 @@ import androidx.navigation.fragment.NavHostFragment
 import com.aliosman.makalepaylas.databinding.ActivityMainBinding
 import com.aliosman.makalepaylas.databinding.BootmSheetDialogBinding
 import com.aliosman.makalepaylas.ui.SearchPageActivity
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var navController: NavController
+
+    private lateinit var auth: FirebaseAuth
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,6 +41,7 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
+        auth = FirebaseAuth.getInstance()
 
         val navHostFragment = supportFragmentManager
             .findFragmentById(R.id.main_fragmentContainerView) as NavHostFragment
@@ -100,8 +108,28 @@ class MainActivity : AppCompatActivity() {
         }
 
         bottomBinding.exitButton.setOnClickListener{
-            Toast.makeText(this, "Çıkış", Toast.LENGTH_SHORT).show()
-        }
+            signOut()
 
+            val intent = Intent(this, LoginActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
     }
+
+    private fun signOut() {
+        // Firebase Authentication oturumunu kapat
+        auth.signOut()
+
+        // Google Sign-In oturumunu kapat
+        val googleSignInClient = GoogleSignIn.getClient(this, GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).build())
+        googleSignInClient.signOut().addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                Toast.makeText(this, "Çıkış başarılı", Toast.LENGTH_SHORT).show()
+                // Kullanıcıyı giriş sayfasına yönlendirme veya başka bir işlem
+            } else {
+                Toast.makeText(this, "Çıkış başarısız", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
 }

@@ -9,15 +9,30 @@
         android:id="@+id/loginPageFragment"
         android:name="com.aliosman.makalepaylas.login.LoginPageFragment"
         android:label="fragment_login_page"
-        tools:layout="@layout/fragment_login_page" />
+        tools:layout="@layout/fragment_login_page" >
+        <action
+            android:id="@+id/action_loginPageFragment_to_signUpPageFragment"
+            app:destination="@id/signUpPageFragment" />
+    </fragment>
     <fragment
         android:id="@+id/signUpPageFragment"
         android:name="com.aliosman.makalepaylas.login.SignUpPageFragment"
         android:label="fragment_sign_up_page"
-        tools:layout="@layout/fragment_sign_up_page" />
+        tools:layout="@layout/fragment_sign_up_page" >
+        <action
+            android:id="@+id/action_signUpPageFragment_to_signUp2Fragment"
+            app:destination="@id/signUp2Fragment" />
+        <argument
+            android:name="userInfos"
+            app:argType="string[]" />
+    </fragment>
     <fragment
         android:id="@+id/signUp2Fragment"
         android:name="com.aliosman.makalepaylas.login.SignUp2Fragment"
         android:label="fragment_sign_up2"
-        tools:layout="@layout/fragment_sign_up2" />
+        tools:layout="@layout/fragment_sign_up2" >
+        <argument
+            android:name="userInformations"
+            app:argType="string[]" />
+    </fragment>
 </navigation>

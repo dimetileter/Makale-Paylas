@@ -8,14 +8,40 @@
     android:background="@color/background_color"
     tools:context=".login.SignUp2Fragment">
 
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.269"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.409" />
+
+    <TextView
+        android:id="@+id/textView5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="360dp"
+        android:layout_marginEnd="88dp"
+        android:text="Neredeyse Hazır"
+        android:textColor="@color/white"
+        android:textSize="24sp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <ImageView
         android:id="@+id/login_profile_picture"
         android:layout_width="146dp"
         android:layout_height="146dp"
-        android:layout_marginTop="133dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.11333333"
         app:srcCompat="@drawable/profile_picture" />
 
     <TextView
@@ -105,11 +131,11 @@
         android:text="@string/dogrulama_kodu"
         android:textColor="@color/white"
         android:textSize="15sp"
-        app:layout_constraintBottom_toTopOf="@+id/txt_name"
-        app:layout_constraintStart_toStartOf="@+id/txt_name" />
+        app:layout_constraintBottom_toTopOf="@+id/txt_verification"
+        app:layout_constraintStart_toStartOf="@+id/txt_verification" />
 
     <EditText
-        android:id="@+id/txt_name"
+        android:id="@+id/txt_verification"
         android:layout_width="350dp"
         android:layout_height="54dp"
         android:layout_marginTop="85dp"
@@ -132,8 +158,8 @@
         app:cardBackgroundColor="@color/next_button"
         app:cardCornerRadius="10dp"
         app:cardElevation="4dp"
-        app:layout_constraintEnd_toEndOf="@+id/txt_name"
-        app:layout_constraintTop_toBottomOf="@+id/txt_name">
+        app:layout_constraintEnd_toEndOf="@+id/txt_verification"
+        app:layout_constraintTop_toBottomOf="@+id/txt_verification">
 
         <ImageView
             android:layout_width="wrap_content"
@@ -143,6 +169,7 @@
             app:srcCompat="@drawable/ic_arrow" />
 
         <Button
+            android:id="@+id/signup_next_button2"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginLeft="5dp"
