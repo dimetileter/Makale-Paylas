@@ -54,7 +54,9 @@ class SignUp2Fragment : Fragment() {
         }
 
         binding.signupNextButton2.setOnClickListener {
+            binding.progressBar.visibility = View.VISIBLE
             saveUserInformations()
+            binding.progressBar.visibility = View.GONE
         }
     }
 
