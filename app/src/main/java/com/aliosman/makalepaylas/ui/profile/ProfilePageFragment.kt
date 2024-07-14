@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import com.aliosman.makalepaylas.databinding.FragmentProfilePageBinding
+import com.aliosman.makalepaylas.datatransfer.DataManager
 import com.aliosman.makalepaylas.ui.SavesPageActivity
 
 class ProfilePageFragment : Fragment() {
@@ -33,6 +34,11 @@ class ProfilePageFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        DataManager.profilePicture?.let {
+            val profilePictureBitmap = it
+            binding.profilePicture.setImageBitmap(profilePictureBitmap)
+        }
 
         binding.savesButton.setOnClickListener {
             saves_button(it)

@@ -1,32 +1,37 @@
-package com.aliosman.makalepaylas
+package com.aliosman.makalepaylas.activities
 
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
+import androidx.navigation.NavOptions
 import androidx.navigation.fragment.NavHostFragment
+import com.aliosman.makalepaylas.R
+import com.aliosman.makalepaylas.activities.viewmodel.MainActivityViewModel
 import com.aliosman.makalepaylas.databinding.ActivityMainBinding
 import com.aliosman.makalepaylas.databinding.BootmSheetDialogBinding
+import com.aliosman.makalepaylas.datatransfer.DataManager
 import com.aliosman.makalepaylas.ui.SearchPageActivity
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.ktx.auth
+
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var navController: NavController
-
+    private lateinit var viewModel: MainActivityViewModel
     private lateinit var auth: FirebaseAuth
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,6 +47,9 @@ class MainActivity : AppCompatActivity() {
         }
 
         auth = FirebaseAuth.getInstance()
+        viewModel = ViewModelProvider(this)[MainActivityViewModel::class.java]
+        viewModel.getUserInfo()
+
 
         val navHostFragment = supportFragmentManager
             .findFragmentById(R.id.main_fragmentContainerView) as NavHostFragment
@@ -59,35 +67,81 @@ class MainActivity : AppCompatActivity() {
         binding.navUploadButton.setOnClickListener {
             actionToUploadPage()
         }
+
+        observer()
     }
 
+    private fun observer()
+    {
+        viewModel.isLoading.observe(this) {
+            if (it) {
+                //Yükleme ekranı
+            }
+        }
 
-    //Ana sayfaya git
+        viewModel.userInfoList.observe(this) {
+
+            it?.let {
+                // Alınan verileri aracı sınıfa at
+                val nickname = it.get(0) as String?
+                val byteArray = it.get(1) as ByteArray?
+
+                // ByteArray formatındaki profil resmini bitmap tipine çevir
+                byteArray?.let {
+                    val profilePictureBitmap = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size)
+                    DataManager.profilePicture = profilePictureBitmap
+                }
+
+                // Kullanıcı ismini tanımla
+                nickname?.let {
+                    binding.txtKullaniciAdi.text = nickname
+                }
+            }
+        }
+
+    }
+
+    // Ana sayfaya git
     private fun actionToHomePage()
     {
-        navController.navigate(R.id.homePageFragment)
+        navController.navigate(R.id.homePageFragment, null, getNavOptions(R.id.homePageFragment))
     }
 
-    //Profil sayfasına git
+    // Profil sayfasına git
     private fun actionToProfilePage()
     {
-        navController.navigate(R.id.profilePageFragment)
+        navController.navigate(R.id.profilePageFragment, null, getNavOptions(R.id.profilePageFragment))
     }
 
-    //Yükleme sayfasına git
+    // Yükleme sayfasına git
     private fun actionToUploadPage()
     {
-        navController.navigate(R.id.uploadPageFragment)
+        navController.navigate(R.id.uploadPageFragment, null, getNavOptions(R.id.uploadPageFragment))
     }
 
-    //Arama sayfasına git
+    // Önceki fragmanları temizle
+    private fun getNavOptions(destinationId: Int): NavOptions {
+        return NavOptions.Builder()
+            .setPopUpTo(destinationId, false)
+            .build()
+    }
+
+    // Arama sayfasına git
     fun search_button(view: View)
     {
         val intent = Intent(this, SearchPageActivity::class.java)
         startActivity(intent)
     }
 
-    //Ayarlar menüsü butonu
+    // Giriş sayfasına dön
+    private fun actionToLoginActivity()
+    {
+        val intent = Intent(this, LoginActivity::class.java)
+        startActivity(intent)
+        this.finish()
+    }
+
+    // Ayarlar menüsü butonu
     fun settings_button(view: View)
     {
         val bottomSheetDialog = BottomSheetDialog(this)
@@ -108,14 +162,13 @@ class MainActivity : AppCompatActivity() {
         }
 
         bottomBinding.exitButton.setOnClickListener{
+            // TODO: Hesaptan çıkış yapılınca login ekranına dönüldüğü esnada çökme sorunu var
             signOut()
-
-            val intent = Intent(this, LoginActivity::class.java)
-            startActivity(intent)
-            finish()
+            actionToLoginActivity()
         }
     }
 
+    // Google hesabından çıkış yap
     private fun signOut() {
         // Firebase Authentication oturumunu kapat
         auth.signOut()
@@ -124,10 +177,12 @@ class MainActivity : AppCompatActivity() {
         val googleSignInClient = GoogleSignIn.getClient(this, GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).build())
         googleSignInClient.signOut().addOnCompleteListener { task ->
             if (task.isSuccessful) {
-                Toast.makeText(this, "Çıkış başarılı", Toast.LENGTH_SHORT).show()
+                val message = getString(R.string.toast_cikis_basarili)
+                Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
                 // Kullanıcıyı giriş sayfasına yönlendirme veya başka bir işlem
             } else {
-                Toast.makeText(this, "Çıkış başarısız", Toast.LENGTH_SHORT).show()
+                val message = getString(R.string.toast_cikis_basarisiz)
+                Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
             }
         }
     }

@@ -1,4 +1,4 @@
-package com.aliosman.makalepaylas
+package com.aliosman.makalepaylas.activities
 
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge

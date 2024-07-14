@@ -34,5 +34,8 @@
         <argument
             android:name="userInformations"
             app:argType="string[]" />
+        <argument android:name="profilePicture"
+            app:argType="android.net.Uri"
+            app:nullable="true" />
     </fragment>
 </navigation>

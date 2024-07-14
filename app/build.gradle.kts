@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.android)
     id("com.google.gms.google-services")
     id("androidx.navigation.safeargs")
+    id ("com.google.devtools.ksp")
 }
 
 android {
@@ -14,8 +15,7 @@ android {
         minSdk = 28
         targetSdk = 34
         versionCode = 1
-        versionName = "Beta 1.0.0"
-
+        versionName = "Beta 1.1.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -69,6 +69,7 @@ dependencies {
     implementation("com.google.android.gms:play-services-auth:21.2.0")
     //İmport fireabse firesotare database
     implementation("com.google.firebase:firebase-firestore")
+    implementation("com.google.firebase:firebase-storage")
 
     // Lifecycle
     val lifecycle_version = "2.8.3"
@@ -76,6 +77,20 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-common-java8:$lifecycle_version")
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version")
 
+    val room_version = "2.6.1"
+
+    implementation("androidx.room:room-runtime:$room_version")
+    annotationProcessor("androidx.room:room-compiler:$room_version")
+    // To use Kotlin Symbol Processing (KSP)
+    ksp("androidx.room:room-compiler:$room_version")
+
     //Corotines
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.9")
+    implementation ("androidx.room:room-ktx:$room_version")
+
+    //Glide
+    implementation("com.github.bumptech.glide:glide:4.11.0")
+
+    //Picasso
+    implementation("com.squareup.picasso:picasso:2.8")
 }

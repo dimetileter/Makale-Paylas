@@ -4,7 +4,7 @@
     <string name="btn_google">GOOGLE İLE DEVAM ET</string>
     <string name="istege_gore_profil_resmi_seciniz">İsteğe göre profil resmi seçiniz*</string>
     <string name="profil_resmi_degisim">Profil resmi daha sonra değiştirilebilir.</string>
-    <string name="bu_bilgiye_neden_ihtiyacimiz_var">Bu bilgiye neden ihtiyacımız var?</string>
+    <string name="bu_bilgiye_neden_ihtiyacimiz_var"> <u>Bu bilgiye neden ihtiyacımız var?</u> </string>
     <string name="isim_soyisim">İsim-soyisim</string>
     <string name="kullanici_adi">Kullanıcı Adı</string>
     <string name="dogum_tarihi">Doğum tarihi</string>
@@ -19,7 +19,7 @@
     <string name="yazar_isim_soyad">Yazar: İsim Soyad</string>
     <string name="ornek_tarih">24.06.2024</string>
     <string name="hint_makale_ismi">Makale ismi</string>
-    <string name="hint_makale_aciklamasi">Açıklama...</string>
+    <string name="hint_makale_aciklamasi">Açıklama…</string>
     <string name="ornek_makale_ismi">Planck Sabiti Hakkında</string>
     <string name="ornek_yazar_ismi">Dimetileter</string>
     <string name="kullanici_ismini_degistir">Kullanıcı ismini değiştir</string>"
@@ -27,11 +27,37 @@
     <string name="koyu_mod">Koyu Mod</string>
     <string name="cikis">Çıkış</string>
     <string name="kaydedilenler">Kaydedilenler</string>
-    <string name="ornek">Enerjinin frekans ile çarpımı, Planck sabitiyle (h) çarpılarak bulunur. Yani, E = h * f formülünde, E enerjiyi, h Planck sabitini ve f ise frekansı temsil eder.
+    <string name="neredeyse_hazir">Neredeyse hazır…</string>
+    <string name="yukleme_bilgisi">Bu işlemin süresi internet bağlantınıza, cihazınıza ve profil resminizinçözünürlüğne
+    göre uzun ya da kısa sürebilir.</string>
+    <string name="toast_cikis_basarili">Çıkış başarılı</string>
+    <string name="toast_cikis_basarisiz">Çıkış başarısız</string>"
+    <string name="toast_giris_basarisiz">Giriş başarısız</string>
+    <string name="toast_kayit_tamamla">Lütfen kaydınızı tamamlayınız. Yeni hesap girişi için geri tuşuna basınız.</string>
+    <string name="toast_olarak_giris_yapiliyor">olarak giriş yapılıyor</string>
+    <string name="snack_galeri_izni_gerekli">Glaeriye erişim için izin gerekli</string>
+    <string name="snack_izin_ver">İzin ver</string>
+    <string name="toast_izin_ayari_ac">Ayarlardan galeri erişim iznini açın</string>
+    <string name="toast_bilgiler_bos_birakilamaz">Kullanici bilgileri boş bırakılamaz</string>
+    <string name="toast_profil_resmi_yuklenmedi">Profil resmi yüklenemedi. Daha sonra tekrar deneyin</string>
+    <string name="toast_hesap_olusturulmadi">Hesap oluşturulamadı. Tekrar deneyin</string>
 
-Bu formül, bir fotonun enerjisinin frekansı ile doğru orantılı olduğunu gösterir. Yani, bir fotonun frekansı arttıkça, onun enerjisi de artar. Bu da klasik fiziğin dalga kuramıyla uyumlu bir şekilde düşünülebilir, çünkü frekans arttıkça dalga boyu kısalır ve enerji yoğunluğu artar.
+    <string name="ornek">Enerjinin frekans ile çarpımı, Planck sabitiyle (h) çarpılarak bulunur. Yani, E = h * f formülünde,
+    E enerjiyi, h Planck sabitini ve f ise frekansı temsil eder. Bu formül, bir fotonun enerjisinin frekansı ile doğru orantılı
+    olduğunu gösterir. Yani, bir fotonun frekansı arttıkça, onun enerjisi de artar. Bu da klasik fiziğin dalga kuramıyla uyumlu
+    bir şekilde düşünülebilir, çünkü frekans arttıkça dalga boyu kısalır ve enerji yoğunluğu artar. Ancak, E/f olarak ifade
+    edilen bir değer Planck sabiti değildir. Planck sabiti (h), enerji ve frekans arasındaki ilişkiyi ifade eder, ancak sadece
+    bir fotonun enerjisiyle değil. Bu nedenle, E/f olarak ifade edilen bir değer, Planck sabiti olarak kabul edilemez.
+    Planck sabiti (h), temel bir doğal sabit olup, enerji ve frekans arasındaki ilişkiyi tanımlar. Ancak, sadece enerji birimi
+    değil, enerji ve frekans arasındaki ilişkiyi temsil eden bir katsayıdır. Bu nedenle, Planck sabiti (h) ile frekansı bölerek
+    doğrudan enerji birimini elde edemeyiz.</string>
 
-Ancak, E/f olarak ifade edilen bir değer Planck sabiti değildir. Planck sabiti (h), enerji ve frekans arasındaki ilişkiyi ifade eder, ancak sadece bir fotonun enerjisiyle değil. Bu nedenle, E/f olarak ifade edilen bir değer, Planck sabiti olarak kabul edilemez.
-
-Planck sabiti (h), temel bir doğal sabit olup, enerji ve frekans arasındaki ilişkiyi tanımlar. Ancak, sadece enerji birimi değil, enerji ve frekans arasındaki ilişkiyi temsil eden bir katsayıdır. Bu nedenle, Planck sabiti (h) ile frekansı bölerek doğrudan enerji birimini elde edemeyiz.</string>
+    <string name="kullanici_aydinlatma_metni"> ºPlatformumuzda sağlanacak her türlü paylaşım ve ifade özgürdür ancak insanların
+    daha iyi bir deneyim inşa etmesi için kullanıcılara doğru bilginin ve içeriğin sunulması son derece önemli. Bu sebeple
+    paylaşım yapmak ve fikirlerini kitlelere ulaştırmak isteyen kullanıcıların güvenilir bilgiye sahip olmaları tarafımızca
+    önemsenmektedir. Ayrıca, her ne kadar özgür bir platformda olsakta rastgele içeriklerin paylaşıldığı ve amacından tam
+    anlamıyla sapmaya başlamış bir platforma dönüşmek istemeyiz. Veri akışının sağlanabilirliği ve güvenli bilginin paylaşıldığı
+    bir ortam için çalışmaktayız.ºBu yaklaşım elbette ki fikir beyanında bulunmak isteyen kişilerin fikirlerini engellememektedir.
+    Fikirlerini ve yazılarınızı her daim paylaşabilirsiniz. Fakat onaylanmış kullanıcılar işinde daha bilgili ve profesyonel
+    olarak kabul edilmektedir; okurlar için bir takip sistemi oluşturmaktadır.</string>
 </resources>

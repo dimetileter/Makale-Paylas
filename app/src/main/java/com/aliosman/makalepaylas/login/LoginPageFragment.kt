@@ -10,7 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.navigation.Navigation
-import com.aliosman.makalepaylas.MainActivity
+import com.aliosman.makalepaylas.activities.MainActivity
 import com.aliosman.makalepaylas.R
 import com.aliosman.makalepaylas.databinding.FragmentLoginPageBinding
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -20,7 +20,6 @@ import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
-import com.google.firebase.firestore.DocumentId
 import com.google.firebase.firestore.FirebaseFirestore
 
 
@@ -34,7 +33,7 @@ class LoginPageFragment : Fragment() {
 
     private lateinit var googleSignInClient: GoogleSignInClient
     companion object {
-        private const val RC_SIGN_IN = 9001
+        const val RC_SIGN_IN = 9001
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,7 +46,6 @@ class LoginPageFragment : Fragment() {
         db = FirebaseFirestore.getInstance()
         val currentUser = auth.currentUser
 
-        //TODO: Eğer hesap açılmışsa ama kayıt bilgileri tamamlanmamışsa login'e atsın
         if (currentUser != null)
         {
             checkUserInDatabase(currentUser)
@@ -66,7 +64,6 @@ class LoginPageFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
         binding.btnGoogleIleGiris.setOnClickListener {
             signIn()
         }
@@ -74,6 +71,7 @@ class LoginPageFragment : Fragment() {
 
     // Google Sign-In ve Firebase Authentication işlemleri için doğru yapılandırma kontrolü
     private fun signIn() {
+
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(getString(R.string.default_web_client_id))
             .requestEmail()
@@ -105,14 +103,15 @@ class LoginPageFragment : Fragment() {
             if (task.isSuccessful)
             {
                 val user = auth.currentUser
-                Toast.makeText(requireContext(), "${user?.displayName} olarak giriş yapılıyor", Toast.LENGTH_SHORT).show()
+                val message = getString(R.string.toast_olarak_giris_yapiliyor)
+                Toast.makeText(requireContext(), "${user?.displayName}  $message", Toast.LENGTH_SHORT).show()
                 user?.let {
                     checkUserInDatabase(it)
                 }
             }
-            else
-            {
-                Toast.makeText(requireContext(), "Giriş başarısız", Toast.LENGTH_SHORT).show()
+            else {
+                val message = getString(R.string.toast_giris_basarisiz)
+                Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -133,6 +132,8 @@ class LoginPageFragment : Fragment() {
                 if (!userUID.isNullOrEmpty()) {
                     actionToMainActivity()
                 } else {
+                    val message = getString(R.string.toast_kayit_tamamla)
+                    Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
                     actionToSignUpPage()
                 }
             } else {
@@ -157,11 +158,13 @@ class LoginPageFragment : Fragment() {
     private fun actionToSignUpPage()
     {
         val email = auth.currentUser?.email
-        val uıd = auth.currentUser?.uid
-        val userInfos = arrayOf(email, uıd)
+        val uid = auth.currentUser?.uid
+        val userInfos = arrayOf(email, uid)
 
-        val action = LoginPageFragmentDirections.actionLoginPageFragmentToSignUpPageFragment(userInfos)
-        Navigation.findNavController(binding.root).navigate(action)
+        view?.let {
+            val action = LoginPageFragmentDirections.actionLoginPageFragmentToSignUpPageFragment(userInfos)
+            Navigation.findNavController(binding.root).navigate(action)
+        }
     }
 
     override fun onDestroyView() {
