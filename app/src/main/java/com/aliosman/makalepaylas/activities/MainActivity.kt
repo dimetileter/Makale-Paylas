@@ -1,7 +1,6 @@
 package com.aliosman.makalepaylas.activities
 
 import android.content.Intent
-import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.view.View
@@ -18,7 +17,7 @@ import com.aliosman.makalepaylas.R
 import com.aliosman.makalepaylas.activities.viewmodel.MainActivityViewModel
 import com.aliosman.makalepaylas.databinding.ActivityMainBinding
 import com.aliosman.makalepaylas.databinding.BootmSheetDialogBinding
-import com.aliosman.makalepaylas.datatransfer.DataManager
+import com.aliosman.makalepaylas.util.DataManager
 import com.aliosman.makalepaylas.ui.SearchPageActivity
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions

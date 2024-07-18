@@ -147,10 +147,9 @@ class SignUp2Fragment : Fragment() {
             // Kullanıcı bilgileri veritabanına yüklenmemişse hata mesajı göster
             if (it)
             {
-                val message = getString(R.string.toast_hesap_olusturulmadi)
-                Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
-                binding.constraintLayoutSignup2.visibility = View.VISIBLE
+                binding.signup2ErrorScreen.visibility = View.VISIBLE
                 binding.signup2LoadingScreen.visibility = View.GONE
+                binding.constraintLayoutSignup2.visibility = View.GONE
             }
         }
 

@@ -1,6 +1,7 @@
 package com.aliosman.makalepaylas.ui
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
@@ -8,17 +9,27 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.aliosman.makalepaylas.R
+import com.aliosman.makalepaylas.databinding.ActivityDownloadPageBinding
+import com.aliosman.makalepaylas.model.GetPdfInfoModel
 
 class DownloadPageActivity : AppCompatActivity() {
+
+    private lateinit var binding: ActivityDownloadPageBinding
+    private var pdfInfo: ArrayList<String>? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        binding = ActivityDownloadPageBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
         enableEdgeToEdge()
-        setContentView(R.layout.activity_download_page)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+
     }
 
     //İndirme butonu

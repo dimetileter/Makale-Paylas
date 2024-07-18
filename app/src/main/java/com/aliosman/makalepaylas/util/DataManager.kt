@@ -1,4 +1,4 @@
-package com.aliosman.makalepaylas.datatransfer
+package com.aliosman.makalepaylas.util
 
 import android.graphics.Bitmap
 

@@ -39,8 +39,17 @@
     <string name="snack_izin_ver">İzin ver</string>
     <string name="toast_izin_ayari_ac">Ayarlardan galeri erişim iznini açın</string>
     <string name="toast_bilgiler_bos_birakilamaz">Kullanici bilgileri boş bırakılamaz</string>
-    <string name="toast_profil_resmi_yuklenmedi">Profil resmi yüklenemedi. Daha sonra tekrar deneyin</string>
+    <string name="toast_profil_resmi_yuklenmedi">Profil resmi eklenemedi. Daha sonra tekrar eklemeyi deneyin</string>
     <string name="toast_hesap_olusturulmadi">Hesap oluşturulamadı. Tekrar deneyin</string>
+    <string name="secim_yailmadi">Yüklenecek bir PDF dosyası seçiniz</string>
+    <string name="yukleme_bilgilerini_giriniz">Yüklemeye başlamadan önce yükleme bilgilerini tamamlayınız</string>
+    <string name="hesap_olusturma_hatasi">Hesap oluşturulurken hata meydana geldi. Daha sonra tekrar deneyin :(</string>
+    <string name="toast_yukleniyor">Yükleniyor…</string>
+    <string name="toast_yuklendi">Yüklendi</string>
+    <string name="toast_pdf_yuklenmedi">Pdf veritabanına yüklenmedi</string>
+    <string name="toast_baglantinizi_kontrol_edin">İnternet bağlantınızı kontrol edin</string>
+    <string name="pdf_yukleme_bilgisi">Bu işlem bir kaç dakika sürebilir. Yükleme tamamlanırken uygulamayı kullanabilirsiniz</string>
+    <string name="toast_pdf_yulendi_veri_yuklenmedi">"Pdf yüklendi ama bilgileri veri tabanına eklenmedi</string>
 
     <string name="ornek">Enerjinin frekans ile çarpımı, Planck sabitiyle (h) çarpılarak bulunur. Yani, E = h * f formülünde,
     E enerjiyi, h Planck sabitini ve f ise frekansı temsil eder. Bu formül, bir fotonun enerjisinin frekansı ile doğru orantılı

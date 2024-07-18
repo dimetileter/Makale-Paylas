@@ -7,14 +7,23 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.aliosman.makalepaylas.adapter.ProfilePageRecyclerAdapter
 import com.aliosman.makalepaylas.databinding.FragmentProfilePageBinding
-import com.aliosman.makalepaylas.datatransfer.DataManager
+import com.aliosman.makalepaylas.model.GetPdfInfoModel
+import com.aliosman.makalepaylas.util.DataManager
 import com.aliosman.makalepaylas.ui.SavesPageActivity
 
 class ProfilePageFragment : Fragment() {
 
     private var _binding: FragmentProfilePageBinding? = null
     private val binding get() = _binding!!
+
+    private lateinit var adapter: ProfilePageRecyclerAdapter
+    private val pdfList = ArrayList<GetPdfInfoModel>()
+    private lateinit var viewModel: ProfilePageViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,6 +49,17 @@ class ProfilePageFragment : Fragment() {
             binding.profilePicture.setImageBitmap(profilePictureBitmap)
         }
 
+        // ViewModel bağlantısı
+        viewModel = ViewModelProvider(requireActivity())[ProfilePageViewModel::class.java]
+
+        // RecyclerView
+        adapter = ProfilePageRecyclerAdapter(pdfList)
+        binding.profileRecyclerview.layoutManager = GridLayoutManager(requireContext(), 2)
+        binding.profileRecyclerview.adapter = adapter
+
+        observer()
+        viewModel.getPdfList()
+
         binding.savesButton.setOnClickListener {
             saves_button(it)
         }
@@ -48,6 +68,35 @@ class ProfilePageFragment : Fragment() {
             share_profile_button(it)
         }
 
+        binding.profileSwipeRefresh.setOnRefreshListener {
+            viewModel.getPdfList()
+        }
+
+    }
+
+    private fun observer(){
+
+        viewModel.isLoading.observe(viewLifecycleOwner) {
+            if (it) {
+                binding.profileSwipeRefresh.isRefreshing = true
+            }
+            else {
+                binding.profileSwipeRefresh.isRefreshing = false
+            }
+        }
+
+        viewModel.isError.observe(viewLifecycleOwner) {
+            if (it) {
+                binding.profileSwipeRefresh.isRefreshing = false
+            }
+        }
+
+        viewModel.takenPdf.observe(viewLifecycleOwner) {
+            if (!it.isNullOrEmpty())
+            {
+                adapter.refreshData(it)
+            }
+        }
     }
 
     //Kaydet butonu
@@ -62,6 +111,8 @@ class ProfilePageFragment : Fragment() {
     {
         Toast.makeText(requireContext(), "Profili paylaşma işlemi tamamlandı", Toast.LENGTH_SHORT).show()
     }
+
+
 
     override fun onDestroyView() {
         super.onDestroyView()

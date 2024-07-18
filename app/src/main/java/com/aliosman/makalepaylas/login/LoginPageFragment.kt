@@ -30,6 +30,7 @@ class LoginPageFragment : Fragment() {
 
     private lateinit var auth: FirebaseAuth
     private lateinit var db: FirebaseFirestore
+    private var currentUser: FirebaseUser? = null
 
     private lateinit var googleSignInClient: GoogleSignInClient
     companion object {
@@ -44,11 +45,11 @@ class LoginPageFragment : Fragment() {
 
         auth = FirebaseAuth.getInstance()
         db = FirebaseFirestore.getInstance()
-        val currentUser = auth.currentUser
+        this.currentUser = auth.currentUser
 
         if (currentUser != null)
         {
-            checkUserInDatabase(currentUser)
+            checkUserInDatabase(currentUser!!)
         }
     }
 
@@ -119,27 +120,20 @@ class LoginPageFragment : Fragment() {
     // Kullanıcı bilgilerini kontrol et
     fun checkUserInDatabase(user: FirebaseUser)
     {
-        var userUID:String? = null
-
-        val userRef = db.collection("Users").whereEqualTo("userUID", user.uid)
-        userRef.addSnapshotListener { querySnapshot, firebaseFirestoreException ->
-            if (querySnapshot != null && !querySnapshot.isEmpty) {
-                val documents = querySnapshot.documents
-                for (doc in documents) {
-                    userUID = doc.getString("userUID")
-                }
-
-                if (!userUID.isNullOrEmpty()) {
-                    actionToMainActivity()
-                } else {
-                    val message = getString(R.string.toast_kayit_tamamla)
-                    Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
-                    actionToSignUpPage()
-                }
-            } else {
+        val userRef = db.collection("Users").document(user.uid)
+        userRef.get().addOnSuccessListener {
+            if (it.exists()) {
+                // Kullanıcı mevcut
+                binding.btnGoogleIleGiris.isEnabled = true
+                actionToMainActivity()
+            }else {
+                // Kullanici mevcut değil
+                binding.btnGoogleIleGiris.isEnabled = true
                 actionToSignUpPage()
             }
         }
+    // Kullanici sorgulanirken hata meydan geldi
+    // Login ekranında kalmaya devam et
     }
 
 
@@ -159,7 +153,8 @@ class LoginPageFragment : Fragment() {
     {
         val email = auth.currentUser?.email
         val uid = auth.currentUser?.uid
-        val userInfos = arrayOf(email, uid)
+        val displayName = auth.currentUser?.displayName
+        val userInfos = arrayOf(email, uid, displayName)
 
         view?.let {
             val action = LoginPageFragmentDirections.actionLoginPageFragmentToSignUpPageFragment(userInfos)

@@ -27,6 +27,10 @@ class SaveUserInfoViewModel(private val application: Application): AndroidViewMo
     private lateinit var dao: UserInfoDAO
     private lateinit var roomdb: UserInfoDatabase
 
+    private var userInfosHashMap =  HashMap<String, Any>()
+    private var profilePictureUri: Uri? = null
+    private var profilePictureBitmap: Bitmap? = null
+
     var isLoading = MutableLiveData<Boolean>()
     var isPictureError = MutableLiveData<Boolean>()
     var isUserInfoError = MutableLiveData<Boolean>()
@@ -42,7 +46,7 @@ class SaveUserInfoViewModel(private val application: Application): AndroidViewMo
     }
 
     //Kullanıcı bilgilerini kaydet
-    private fun trySaveUserInfoDatabase(userInfosHashMap: HashMap<String, Any>, profilePictureUri: Uri?, profilePictureBitmap: Bitmap?) {
+    private fun trySaveUserInfoDatabase( ) {
 
         isLoading.value = true
 
@@ -58,7 +62,7 @@ class SaveUserInfoViewModel(private val application: Application): AndroidViewMo
                 val imageReferance = referance.child("ProfilePicures").child(email).child(imageUuid)
 
                 //Storage içine resim koy
-                imageReferance.putFile(profilePictureUri).addOnSuccessListener {
+                imageReferance.putFile(profilePictureUri!!).addOnSuccessListener {
                     imageReferance.downloadUrl.addOnCompleteListener {
 
                         if (it.isSuccessful) {
@@ -68,7 +72,7 @@ class SaveUserInfoViewModel(private val application: Application): AndroidViewMo
                         }
 
                         viewModelScope.launch {
-                            saveInformationsDatabase(userInfosHashMap, profilePictureBitmap)
+                            saveInformationsDatabase()
                         }
                     }
                 }.addOnFailureListener { _ ->
@@ -77,23 +81,26 @@ class SaveUserInfoViewModel(private val application: Application): AndroidViewMo
                     }
                     viewModelScope.launch {
                         userInfosHashMap["profilePictureUrl"] = ""
-                        saveInformationsDatabase(userInfosHashMap, profilePictureBitmap)
+                        saveInformationsDatabase()
                     }
                 }
             } else {
                 viewModelScope.launch {
                     userInfosHashMap["profilePictureUrl"] = ""
-                    saveInformationsDatabase(userInfosHashMap, profilePictureBitmap)
+                    saveInformationsDatabase()
                 }
             }
         }
     }
 
     //Zorunlu kullanıcı bilgilerini kaydet
-    private fun saveInformationsDatabase(userInfosHashMap: HashMap<String, Any>, profilePictureBitmap: Bitmap?)
+    private fun saveInformationsDatabase()
     {
-        db.collection("Users").add(userInfosHashMap).addOnSuccessListener {
-           // Yüklemeyid durdur ve ilgili aktiviteye git
+        val userUid = userInfosHashMap["userUID"] as String
+        val userRef = db.collection("Users").document(userUid)
+
+        userRef.set(userInfosHashMap).addOnSuccessListener {
+
             // Room'daki eski verileri sil
             deleteOldUserInfoRoomDatabase()
 
@@ -101,11 +108,11 @@ class SaveUserInfoViewModel(private val application: Application): AndroidViewMo
                 userInfosHashMap["profilePictureByteArray"] = bitmapToByteArray(profilePictureBitmap)
             }
 
+            // Yeni verileri toom'a kaydet
             saveUserInfoRoomDatabase(userInfosHashMap)
-
-            viewModelScope.launch(Dispatchers.Main) {
+            viewModelScope.launch {
                 isLoading.value = false
-                //navigateNextScreen.value = true
+                navigateNextScreen.value = true
             }
 
         }.addOnFailureListener {
@@ -137,7 +144,7 @@ class SaveUserInfoViewModel(private val application: Application): AndroidViewMo
                 email as String,
                 userUID as String,
                 profilePictureUrl as String,
-                profilePictureByteArray as ByteArray
+                profilePictureByteArray as ByteArray?
             )
 
             dao.insertAll(saveUserInfoModel)
@@ -161,7 +168,12 @@ class SaveUserInfoViewModel(private val application: Application): AndroidViewMo
 
     // Verileri firebase veri tabanına kaydet
     fun saveUserInfos(userInfosHasMap: HashMap<String, Any>, profilePictureUri: Uri?, profilePictureBitmap: Bitmap?) {
-        trySaveUserInfoDatabase(userInfosHasMap, profilePictureUri, profilePictureBitmap)
+
+        this.userInfosHashMap =  userInfosHasMap
+        this.profilePictureBitmap = profilePictureBitmap
+        this.profilePictureUri = profilePictureUri
+
+        trySaveUserInfoDatabase()
     }
 
 }

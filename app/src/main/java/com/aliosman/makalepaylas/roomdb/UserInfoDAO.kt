@@ -25,6 +25,9 @@ interface UserInfoDAO {
     @Query("SELECT profilePicture FROM SaveUserInfoModel")
     suspend fun getProfilePicture(): ByteArray?
 
-    @Query("SELECT userName FROM SAVEUSERINFOMODEL")
-    suspend fun getUserName(): String
+    @Query("SELECT nickName FROM SaveUserInfoModel")
+    suspend fun getNickname(): String
+
+    @Query("SELECT userUID FROM SaveUserInfoModel")
+    suspend fun getUserUUID(): String
 }

@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background_color"
+    android:background="@color/background_colour"
     tools:context=".login.SignUpPageFragment">
 
     <androidx.cardview.widget.CardView
@@ -14,7 +14,7 @@
         android:layout_height="146dp"
         app:cardCornerRadius="70dp"
         app:cardElevation="12dp"
-        app:cardBackgroundColor="@color/background_color"
+        app:cardBackgroundColor="@color/background_colour"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

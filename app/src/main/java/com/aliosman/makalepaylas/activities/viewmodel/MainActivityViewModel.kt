@@ -6,13 +6,10 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import androidx.room.Room
-import com.aliosman.makalepaylas.datatransfer.DataManager
-import com.aliosman.makalepaylas.model.SaveUserInfoModel
 import com.aliosman.makalepaylas.roomdb.UserInfoDAO
 import com.aliosman.makalepaylas.roomdb.UserInfoDatabase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.squareup.picasso.Picasso
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -45,7 +42,7 @@ class MainActivityViewModel(private val application: Application): AndroidViewMo
         isLoading.value = true
 
         viewModelScope.launch {
-            val username = dao.getUserName()
+            val username = dao.getNickname()
             val profilePicture = dao.getProfilePicture()
 
             if (profilePicture != null) {
@@ -59,7 +56,7 @@ class MainActivityViewModel(private val application: Application): AndroidViewMo
             else {
                 withContext(Dispatchers.Main) {
                     isLoading.value = false
-                    userInfoList.value = arrayListOf(username, "null")
+                    userInfoList.value = arrayListOf(username, byteArrayOf())
                     //TODO: ALINAN VERİLER İLGİLİ SINIFA EKLENECEK
                     Toast.makeText(application,"Kullanıcı verileri room ile alındı ama profil resmi alınmadı", Toast.LENGTH_LONG).show()
                 }
@@ -70,24 +67,9 @@ class MainActivityViewModel(private val application: Application): AndroidViewMo
     private fun tryGetUserInformationFromFirebase()
     {
         val currentUser = auth.currentUser?.uid
+        val userRef = db.collection("Users").document(currentUser!!)
 
-        db.collection("User").whereEqualTo("userUID", currentUser).get().addOnCompleteListener {
-            if (it.isSuccessful && !it.result.isEmpty && it.result != null)
-            {
-                val documents = it.result
-                for (docs in documents) {
-                    val nickName = docs.getString("nickName") as String
-                    val profilePictureUrl = docs.getString("profilePictureUrl") as String
 
-                    /*
-                    if (profilePictureUrl != "") {
-                        Picasso.get().load(profilePictureUrl)
-                    }
-                    */
-                    DataManager.nickname = nickName
-                }
-            }
-        }
     }
 
 

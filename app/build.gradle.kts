@@ -15,7 +15,7 @@ android {
         minSdk = 28
         targetSdk = 34
         versionCode = 1
-        versionName = "Beta 1.1.0"
+        versionName = "Beta 1.1.5"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -93,4 +93,7 @@ dependencies {
 
     //Picasso
     implementation("com.squareup.picasso:picasso:2.8")
+
+    //Swipe Refresh Layout
+    implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.2.0-alpha01")
 }

@@ -5,14 +5,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background_color"
+    android:background="@color/background_colour"
     tools:context=".login.SignUp2Fragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout_signup2"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/background_color"
+        android:background="@color/background_colour"
         android:visibility="visible">
 
 
@@ -22,7 +22,7 @@
             android:layout_height="146dp"
             app:cardCornerRadius="70dp"
             app:cardElevation="12dp"
-            app:cardBackgroundColor="@color/background_color"
+            app:cardBackgroundColor="@color/background_colour"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -245,4 +245,31 @@
 
         </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/signup2_error_screen"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginHorizontal="30dp"
+        android:layout_marginVertical="40dp"
+        android:background="@drawable/outline"
+        android:visibility="gone"
+        android:gravity="center_vertical"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:textAlignment="center"
+            android:layout_marginHorizontal="10dp"
+            android:fontFamily="@font/kanit_regular"
+            android:text="@string/hesap_olusturma_hatasi"
+            android:textColor="@color/white"
+            android:textSize="18sp" />
+
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
