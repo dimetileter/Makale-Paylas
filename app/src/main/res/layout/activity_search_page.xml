@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background_colour"
-    tools:context=".ui.SearchPageActivity">
+    tools:context=".activities.SearchPageActivity">
 
     <TextView
         android:id="@+id/txt_kullanici_adi"

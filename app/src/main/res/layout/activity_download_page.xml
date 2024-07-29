@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background_colour"
-    tools:context=".ui.DownloadPageActivity">
+    tools:context=".activities.DownloadPageActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout"
@@ -20,7 +20,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:id="@+id/txt_download_page_makale_basligi"
+            android:id="@+id/txt_download_page_article_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
@@ -41,7 +41,7 @@
             android:background="@color/white"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/txt_download_page_makale_basligi" />
+            app:layout_constraintTop_toBottomOf="@+id/txt_download_page_article_title" />
 
 
         <ImageView
@@ -64,12 +64,12 @@
             android:layout_height="1dp"
             android:layout_marginBottom="14dp"
             android:background="@color/white"
-            app:layout_constraintBottom_toTopOf="@+id/txt_download_page_yazar_ismi"
+            app:layout_constraintBottom_toTopOf="@+id/txt_download_page_author_name"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
         <TextView
-            android:id="@+id/txt_download_page_yazar_ismi"
+            android:id="@+id/txt_download_page_author_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="22dp"
@@ -98,7 +98,7 @@
         app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
 
     <TextView
-        android:id="@+id/article_description"
+        android:id="@+id/txt_download_article_description"
         android:layout_width="286dp"
         android:layout_height="0dp"
         android:layout_marginTop="20dp"

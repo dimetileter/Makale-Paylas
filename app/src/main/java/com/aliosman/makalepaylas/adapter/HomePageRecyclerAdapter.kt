@@ -1,16 +1,16 @@
 package com.aliosman.makalepaylas.adapter
 
 import android.content.Intent
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.aliosman.makalepaylas.databinding.RecyclerViewHomeBinding
 import com.aliosman.makalepaylas.model.GetHomePdfInfoHModel
-import com.aliosman.makalepaylas.ui.DownloadPageActivity
-import com.aliosman.makalepaylas.util.ToastMessages
+import com.aliosman.makalepaylas.activities.DownloadPageActivity
 import com.aliosman.makalepaylas.util.downloadImage
 
-class HomePageRecyclerAdapter(val pdfList: ArrayList<GetHomePdfInfoHModel>): RecyclerView.Adapter<HomePageRecyclerAdapter.ViewHolder>() {
+class HomePageRecyclerAdapter(private val pdfList: ArrayList<GetHomePdfInfoHModel>): RecyclerView.Adapter<HomePageRecyclerAdapter.ViewHolder>() {
 
     class ViewHolder(val binding: RecyclerViewHomeBinding): RecyclerView.ViewHolder(binding.root) {
 
@@ -33,8 +33,19 @@ class HomePageRecyclerAdapter(val pdfList: ArrayList<GetHomePdfInfoHModel>): Rec
         }
         holder.itemView.setOnClickListener {
             val intent = Intent(holder.itemView.context, DownloadPageActivity::class.java)
+
+            // Verielri bundle olarak DownloadPage aktivitesine gönder
+            val bundle = Bundle().apply {
+                putString("artName", pdfList[position].artName)
+                putString("artDesc", pdfList[position].artDesc)
+                putString("pdfUrl", pdfList[position].pdfUrl)
+                putString("pdfBitmapUrl", pdfList[position].pdfBitmapUrl)
+                putString("createdAt", pdfList[position].createdAt)
+                putString("nickname", pdfList[position].nickname)
+                putString("pdfUUID", pdfList[position].pdfUUID)
+            }
+            intent.putExtras(bundle)
             holder.itemView.context.startActivity(intent)
-            ToastMessages(holder.itemView.context).showToastLong("Önizleme Modu (Yakında doğru veriler getirilecek)")
         }
     }
 

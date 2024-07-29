@@ -9,8 +9,8 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import androidx.room.Room
-import com.aliosman.makalepaylas.roomdb.UserInfoDAO
-import com.aliosman.makalepaylas.roomdb.UserInfoDatabase
+import com.aliosman.makalepaylas.roomdb.userroom.UserInfoDAO
+import com.aliosman.makalepaylas.roomdb.userroom.UserInfoDatabase
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -134,7 +134,7 @@ class UploadPageViewModel(private val application: Application): AndroidViewMode
 
         viewModelScope.launch(Dispatchers.IO) {
 
-            val pdfInfos = HashMap<String, Any>()
+            val pdfInfos = HashMap<String, Any?>()
             pdfInfos.put("pdfUrl", pdfUrl)
             pdfInfos.put("pdfBitmapUrl", pdfBitmapUrl)
             pdfInfos.put("artName", artName!!)
@@ -143,6 +143,7 @@ class UploadPageViewModel(private val application: Application): AndroidViewMode
             pdfInfos.put("user", user!!.email!!)
             pdfInfos.put("userUID", user!!.uid)
             pdfInfos.put("nickName", nickname)
+            pdfInfos.put("pdfUUID", pdfNameWithUuid!!)
 
             // PDF verilerini database içine koy
             val ref = db.collection("Posts").document(pdfNameWithUuid!!)
@@ -189,7 +190,7 @@ class UploadPageViewModel(private val application: Application): AndroidViewMode
         return uri
     }
 
-    private suspend fun getNickName(): String
+    private suspend fun getNickName(): String?
     {
         return dao.getNickname()
     }

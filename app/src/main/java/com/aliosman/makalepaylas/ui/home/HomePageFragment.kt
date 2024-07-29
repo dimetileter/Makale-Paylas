@@ -1,6 +1,5 @@
 package com.aliosman.makalepaylas.ui.home
 
-import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -11,9 +10,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.aliosman.makalepaylas.adapter.HomePageRecyclerAdapter
 import com.aliosman.makalepaylas.databinding.FragmentHomePageBinding
 import com.aliosman.makalepaylas.model.GetHomePdfInfoHModel
-import com.aliosman.makalepaylas.model.GetPdfInfoModel
-import com.aliosman.makalepaylas.ui.DownloadPageActivity
-import com.aliosman.makalepaylas.ui.profile.ProfilePageViewModel
+import com.aliosman.makalepaylas.util.SharedPreferencesManager
 import com.aliosman.makalepaylas.util.ToastMessages
 
 class HomePageFragment : Fragment() {
@@ -50,37 +47,52 @@ class HomePageFragment : Fragment() {
         binding.homeRecyclerAdapter.adapter = adapter
 
         observer()
-        viewModel.getPdfData()
+
+        // Son yenileme 30 dakikadan daha önce ise otomatik yenile
+        val time = SharedPreferencesManager(requireContext())
+        if(time.checkHomeRefreshTime())
+        {
+            viewModel.getPdfDataInternet()
+            time.saveHomeRefreshTime()
+        }
+        else
+        {
+            viewModel.getPdfDataRoom()
+
+        }
 
         binding.swipeRefreshLayout.setOnRefreshListener {
-            viewModel.getPdfData()
+            viewModel.getPdfDataInternet()
+            time.saveHomeRefreshTime()
         }
     }
 
     private fun observer()
     {
-        viewModel.isLoading.observe(viewLifecycleOwner) {
-            if (it)
-            {
+        viewModel.isLoadingH.observe(viewLifecycleOwner) {
+            // Zaten yükleme yapılırken tekrar yükleme işlemine izin verme
+            if (it) {
+                binding.swipeRefreshLayout.isEnabled = false
                 binding.swipeRefreshLayout.isRefreshing = true
             }
             else {
+                binding.swipeRefreshLayout.isEnabled = true
                 binding.swipeRefreshLayout.isRefreshing = false
             }
         }
 
-        viewModel.isError.observe(viewLifecycleOwner) {
+        viewModel.isErrorH.observe(viewLifecycleOwner) {
             //TODO: Hata mesajı gösterilecek. Geçiçi olarak tost mesajı yerleştirildi
-            ToastMessages(requireContext()).showToastShort("HATA!")
+            if (it)
+                ToastMessages(requireContext()).showToastShort("Veri alımı sırasında HATA!")
         }
 
         viewModel.pdfList.observe(viewLifecycleOwner) {
-            it?.let {
+            if(!it.isNullOrEmpty()) {
                 adapter.refreshData(it)
             }
         }
     }
-
 
     override fun onDestroyView() {
         super.onDestroyView()

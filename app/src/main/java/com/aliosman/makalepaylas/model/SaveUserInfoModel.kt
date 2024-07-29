@@ -10,8 +10,8 @@ data class SaveUserInfoModel(
     @ColumnInfo(name = "userName")
     val userName: String,
 
-    @ColumnInfo(name = "nickName")
-    val nickName: String,
+    @ColumnInfo(name = "nickname")
+    val nickname: String,
 
     @ColumnInfo(name = "birthDate")
     val birthDare: String,
@@ -26,7 +26,10 @@ data class SaveUserInfoModel(
     val profilePictureUrl: String,
 
     @ColumnInfo(name = "profilePicture")
-    val profilePicture : ByteArray?
+    val profilePicture : ByteArray?,
+
+    @ColumnInfo(name = "profilePictureUUID")
+    val profilePictureUUID: String?
 
 ){
     @PrimaryKey (autoGenerate = true) var id = 0

@@ -8,8 +8,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import androidx.room.Room
 import com.aliosman.makalepaylas.model.SaveUserInfoModel
-import com.aliosman.makalepaylas.roomdb.UserInfoDAO
-import com.aliosman.makalepaylas.roomdb.UserInfoDatabase
+import com.aliosman.makalepaylas.roomdb.userroom.UserInfoDAO
+import com.aliosman.makalepaylas.roomdb.userroom.UserInfoDatabase
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -22,10 +22,10 @@ import java.util.UUID
 
 class SaveUserInfoViewModel(private val application: Application): AndroidViewModel(application) {
 
-    private lateinit var storage: FirebaseStorage
-    private lateinit var db: FirebaseFirestore
-    private lateinit var dao: UserInfoDAO
-    private lateinit var roomdb: UserInfoDatabase
+    private var storage: FirebaseStorage
+    private var db: FirebaseFirestore
+    private var dao: UserInfoDAO
+    private var roomdb: UserInfoDatabase
 
     private var userInfosHashMap =  HashMap<String, Any>()
     private var profilePictureUri: Uri? = null
@@ -64,6 +64,8 @@ class SaveUserInfoViewModel(private val application: Application): AndroidViewMo
                 //Storage içine resim koy
                 imageReferance.putFile(profilePictureUri!!).addOnSuccessListener {
                     imageReferance.downloadUrl.addOnCompleteListener {
+
+                        userInfosHashMap["profilePictureUUID"] = imageUuid
 
                         if (it.isSuccessful) {
                             userInfosHashMap["profilePictureUrl"] = it.result.toString()
@@ -130,12 +132,13 @@ class SaveUserInfoViewModel(private val application: Application): AndroidViewMo
 
             // Verileri room'a kaydet
             val userName = userInfosHashMap["userName"]
-            val nickname = userInfosHashMap["nickName"]
+            val nickname = userInfosHashMap["nickname"]
             val birthDate = userInfosHashMap["birthDate"]
             val email = userInfosHashMap["email"]
             val userUID = userInfosHashMap["userUID"]
             val profilePictureUrl = userInfosHashMap["profilePictureUrl"]
             val profilePictureByteArray = userInfosHashMap["profilePictureByteArray"]
+            val profilePictureUUID = userInfosHashMap["profilePictureUUID"]
 
             val saveUserInfoModel = SaveUserInfoModel(
                 userName as String,
@@ -144,9 +147,9 @@ class SaveUserInfoViewModel(private val application: Application): AndroidViewMo
                 email as String,
                 userUID as String,
                 profilePictureUrl as String,
-                profilePictureByteArray as ByteArray?
+                profilePictureByteArray as ByteArray?,
+                profilePictureUUID as String?
             )
-
             dao.insertAll(saveUserInfoModel)
         }
     }

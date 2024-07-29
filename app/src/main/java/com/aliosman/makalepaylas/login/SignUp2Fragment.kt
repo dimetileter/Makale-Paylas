@@ -27,6 +27,7 @@ import com.aliosman.makalepaylas.databinding.InfoBottomSheetDialogBinding
 import com.aliosman.makalepaylas.login.viewmodel.SaveUserInfoViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
 class SignUp2Fragment : Fragment() {
@@ -110,7 +111,7 @@ class SignUp2Fragment : Fragment() {
         val userInfosHasMap = HashMap<String, Any>()
 
         userInfosHasMap.put("userName", userInfos[0])
-        userInfosHasMap.put("nickName", userInfos[1])
+        userInfosHasMap.put("nickname", userInfos[1])
         userInfosHasMap.put("birthDate", userInfos[2])
         userInfosHasMap.put("email", userInfos[3])
         userInfosHasMap.put("userUID", userInfos[4])

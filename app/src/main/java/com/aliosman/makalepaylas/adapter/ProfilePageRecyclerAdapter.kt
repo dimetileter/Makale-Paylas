@@ -1,16 +1,17 @@
 package com.aliosman.makalepaylas.adapter
 
 import android.content.Intent
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.aliosman.makalepaylas.databinding.RecyclerViewHomeBinding
-import com.aliosman.makalepaylas.model.GetPdfInfoModel
-import com.aliosman.makalepaylas.ui.DownloadPageActivity
+import com.aliosman.makalepaylas.model.GetProfilePdfInfoModel
+import com.aliosman.makalepaylas.activities.DownloadPageActivity
 import com.aliosman.makalepaylas.util.ToastMessages
 import com.aliosman.makalepaylas.util.downloadImage
 
-class ProfilePageRecyclerAdapter(private var pdfList: ArrayList<GetPdfInfoModel>): RecyclerView.Adapter<ProfilePageRecyclerAdapter.ViewHolder>() {
+class ProfilePageRecyclerAdapter(private var pdfList: ArrayList<GetProfilePdfInfoModel>): RecyclerView.Adapter<ProfilePageRecyclerAdapter.ViewHolder>() {
 
     class ViewHolder(val binding: RecyclerViewHomeBinding): RecyclerView.ViewHolder(binding.root) {
 
@@ -32,13 +33,22 @@ class ProfilePageRecyclerAdapter(private var pdfList: ArrayList<GetPdfInfoModel>
         holder.binding.pdf.setOnClickListener {
 
             val intent = Intent(holder.itemView.context, DownloadPageActivity::class.java)
-//            intent.putExtra("pdfInfo", pdfList)
+            // Verielri bundle olarak DownloadPage aktivitesine gönder
+            val bundle = Bundle().apply {
+                putString("artName", pdfList[position].artName)
+                putString("artDesc", pdfList[position].artDesc)
+                putString("pdfUrl", pdfList[position].pdfUrl)
+                putString("pdfBitmapUrl", pdfList[position].pdfBitmapUrl)
+                putString("createdAt", pdfList[position].createdAt)
+                putString("nickname", pdfList[position].nickname)
+                putString("pdfUUID", pdfList[position].pdfUUID)
+            }
+            intent.putExtras(bundle)
             holder.itemView.context.startActivity(intent)
-            ToastMessages(holder.itemView.context).showToastLong("Önizleme Modu (Yakında doğru veriler getirilecek)")
         }
     }
 
-    fun refreshData(newPdfList: ArrayList<GetPdfInfoModel>)
+    fun refreshData(newPdfList: ArrayList<GetProfilePdfInfoModel>)
     {
         pdfList.clear()
         pdfList.addAll(newPdfList)

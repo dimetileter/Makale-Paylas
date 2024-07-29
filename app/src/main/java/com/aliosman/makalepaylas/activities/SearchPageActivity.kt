@@ -1,4 +1,4 @@
-package com.aliosman.makalepaylas.ui
+package com.aliosman.makalepaylas.activities
 
 import android.os.Bundle
 import android.view.View

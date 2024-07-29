@@ -9,12 +9,13 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.aliosman.makalepaylas.adapter.ProfilePageRecyclerAdapter
 import com.aliosman.makalepaylas.databinding.FragmentProfilePageBinding
-import com.aliosman.makalepaylas.model.GetPdfInfoModel
+import com.aliosman.makalepaylas.model.GetProfilePdfInfoModel
 import com.aliosman.makalepaylas.util.DataManager
-import com.aliosman.makalepaylas.ui.SavesPageActivity
+import com.aliosman.makalepaylas.activities.SavesPageActivity
+import com.aliosman.makalepaylas.util.SharedPreferencesManager
+import com.aliosman.makalepaylas.util.downloadImage
 
 class ProfilePageFragment : Fragment() {
 
@@ -22,7 +23,7 @@ class ProfilePageFragment : Fragment() {
     private val binding get() = _binding!!
 
     private lateinit var adapter: ProfilePageRecyclerAdapter
-    private val pdfList = ArrayList<GetPdfInfoModel>()
+    private val pdfList = ArrayList<GetProfilePdfInfoModel>()
     private lateinit var viewModel: ProfilePageViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -57,8 +58,18 @@ class ProfilePageFragment : Fragment() {
         binding.profileRecyclerview.layoutManager = GridLayoutManager(requireContext(), 2)
         binding.profileRecyclerview.adapter = adapter
 
-        observer()
-        viewModel.getPdfList()
+        observerProfile()
+
+        val time = SharedPreferencesManager(requireContext())
+        if(time.checkProfileRefreshTime())
+        {
+            viewModel.getPdfList()
+            time.saveProfileRefreshTime()
+        }
+        else
+        {
+            viewModel.getPdfFromRoom()
+        }
 
         binding.savesButton.setOnClickListener {
             saves_button(it)
@@ -70,24 +81,32 @@ class ProfilePageFragment : Fragment() {
 
         binding.profileSwipeRefresh.setOnRefreshListener {
             viewModel.getPdfList()
+            time.saveProfileRefreshTime()
         }
 
     }
 
-    private fun observer(){
+    private fun observerProfile(){
 
-        viewModel.isLoading.observe(viewLifecycleOwner) {
-            if (it) {
-                binding.profileSwipeRefresh.isRefreshing = true
+        viewModel.isLoadingP.observe(viewLifecycleOwner) {
+            // Eğer yükleme yapılıyorsa yükleme tamamlanana kadar yeniden yükleme yapmayı engelle
+            if (it)
+            {
+                val swipeRefresh = binding.profileSwipeRefresh
+                swipeRefresh.isRefreshing = true
+                swipeRefresh.isEnabled = false
             }
-            else {
-                binding.profileSwipeRefresh.isRefreshing = false
+            else
+            {
+                val swipeRefresh = binding.profileSwipeRefresh
+                swipeRefresh.isRefreshing = false
+                swipeRefresh.isEnabled = true
             }
         }
 
-        viewModel.isError.observe(viewLifecycleOwner) {
-            if (it) {
-                binding.profileSwipeRefresh.isRefreshing = false
+        viewModel.isErrorP.observe(viewLifecycleOwner) { isError ->
+            if (isError) {
+                // TODO:Hata mesajı göster
             }
         }
 

@@ -41,13 +41,18 @@
     <string name="toast_bilgiler_bos_birakilamaz">Kullanici bilgileri boş bırakılamaz</string>
     <string name="toast_profil_resmi_yuklenmedi">Profil resmi eklenemedi. Daha sonra tekrar eklemeyi deneyin</string>
     <string name="toast_hesap_olusturulmadi">Hesap oluşturulamadı. Tekrar deneyin</string>
+    <string name="toast_profil_resmi_degistirildi">Profil resmi değiştirildi</string>
     <string name="secim_yailmadi">Yüklenecek bir PDF dosyası seçiniz</string>
     <string name="yukleme_bilgilerini_giriniz">Yüklemeye başlamadan önce yükleme bilgilerini tamamlayınız</string>
     <string name="hesap_olusturma_hatasi">Hesap oluşturulurken hata meydana geldi. Daha sonra tekrar deneyin :(</string>
     <string name="toast_yukleniyor">Yükleniyor…</string>
     <string name="toast_yuklendi">Yüklendi</string>
     <string name="toast_pdf_yuklenmedi">Pdf veritabanına yüklenmedi</string>
+    <string name="toast_pdf_url_null">PDF bağlantısı alınamadı. Bu PDF hatalı olabilir. Daha sonra tekrar deneyin</string>
     <string name="toast_baglantinizi_kontrol_edin">İnternet bağlantınızı kontrol edin</string>
+    <string name="toast_indirme_baslatildi">İndirme Başlatıldı</string>
+    <string name="toast_kaydedildi">Kaydedildi</string>
+    <string name="toast_kaydedilemedi">Kaydedilemedi!</string>
     <string name="pdf_yukleme_bilgisi">Bu işlem bir kaç dakika sürebilir. Yükleme tamamlanırken uygulamayı kullanabilirsiniz</string>
     <string name="toast_pdf_yulendi_veri_yuklenmedi">"Pdf yüklendi ama bilgileri veri tabanına eklenmedi</string>
 

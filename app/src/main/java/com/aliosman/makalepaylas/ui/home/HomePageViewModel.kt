@@ -6,8 +6,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import androidx.room.Room
 import com.aliosman.makalepaylas.model.GetHomePdfInfoHModel
-import com.aliosman.makalepaylas.roomdb.UserInfoDAO
-import com.aliosman.makalepaylas.roomdb.UserInfoDatabase
+import com.aliosman.makalepaylas.roomdb.homeroom.TakenHomePdfDAO
+import com.aliosman.makalepaylas.roomdb.homeroom.TakenHomePdfDatabase
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
@@ -16,20 +16,23 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 
-class HomePageViewModel(application: Application): AndroidViewModel(application) {
+class HomePageViewModel(private val application: Application): AndroidViewModel(application) {
 
-    private var db: FirebaseFirestore
+    private var db: FirebaseFirestore = FirebaseFirestore.getInstance()
+    private var roomDb: TakenHomePdfDatabase
+    private var dao: TakenHomePdfDAO
     private var takenPdfList = ArrayList<GetHomePdfInfoHModel>()
 
     var pdfList = MutableLiveData<ArrayList<GetHomePdfInfoHModel>>()
-    var isLoading = MutableLiveData<Boolean>()
-    var isError = MutableLiveData<Boolean>()
+    var isLoadingH = MutableLiveData<Boolean>()
+    var isErrorH = MutableLiveData<Boolean>()
 
     init {
-        db = FirebaseFirestore.getInstance()
+        roomDb = Room.databaseBuilder(application, TakenHomePdfDatabase::class.java, "TakenHomePdf").build()
+        dao = roomDb.userDao()
     }
 
-    fun getPdfData()
+    fun getPdfDataInternet()
     {
         getPdfDataFromInternet()
     }
@@ -41,7 +44,7 @@ class HomePageViewModel(application: Application): AndroidViewModel(application)
 
     private fun getPdfDataFromInternet()
     {
-        isLoading.value = true
+        isLoadingH.value = true
         takenPdfList.clear()
 
         viewModelScope.launch(Dispatchers.IO) {
@@ -49,37 +52,35 @@ class HomePageViewModel(application: Application): AndroidViewModel(application)
             val pdfRef = db.collection("Posts").orderBy("createdAt", Query.Direction.DESCENDING)
 
             //Firebase firestore'dan verileri getir
-            pdfRef.addSnapshotListener { querySnapshot, exception ->
-                if(querySnapshot != null && exception == null)
+            pdfRef.get().addOnSuccessListener { querySnapshot ->
+                if(querySnapshot != null && !querySnapshot.isEmpty)
                 {
-                    if (!querySnapshot.isEmpty)
+                    // deleteData()
+                    val documents = querySnapshot.documents
+                    for (docs in documents)
                     {
-                        val documents = querySnapshot.documents
-                        for (docs in documents) {
-                            getDocumanInfos(docs)
-                        }
+                        getDocumanInfos(docs)
                     }
-                    else {
-                        viewModelScope.launch(Dispatchers.Main) {
-                            isLoading.value = false
-                            isError.value = true
-                        }
+                    saveDataIntoRoom(takenPdfList)
+
+                    viewModelScope.launch(Dispatchers.Main) {
+                        isLoadingH.value = false
+                        pdfList.value = takenPdfList
                     }
                 }
-                else {
+                else
+                {
                     viewModelScope.launch(Dispatchers.Main) {
-                        isLoading.value = false
-                        isError.value = true
+                        isLoadingH.value = false
+                        isErrorH.value = true
                     }
+                }
+            }.addOnFailureListener {
+                viewModelScope.launch(Dispatchers.Main) {
+                    isLoadingH.value = false
+                    isErrorH.value = true
                 }
             }
-        }
-    }
-
-    private fun getPdfDataFromRoom()
-    {
-        viewModelScope.launch(Dispatchers.IO) {
-
         }
     }
 
@@ -87,12 +88,13 @@ class HomePageViewModel(application: Application): AndroidViewModel(application)
     {
         viewModelScope.launch(Dispatchers.IO) {
 
-            val artName = docs.get("artName") as String
-            val artDesc = docs.get("artDesc") as String
-            val pdfUrl = docs.get("pdfUrl") as String
-            val pdfBitmapUrl = docs.get("pdfBitmapUrl") as String?
-            val createdAt = docs.get("createdAt") as String
-            val nickname = docs.get("nickName") as String
+            val artName = docs.getString("artName") ?: ""
+            val artDesc = docs.getString("artDesc") ?: ""
+            val pdfUrl = docs.getString("pdfUrl") ?: ""
+            val pdfBitmapUrl = docs.getString("pdfBitmapUrl") ?: ""
+            val createdAt = docs.getString("createdAt") ?: ""
+            val nickname = docs.getString("nickName") ?: ""
+            val pdfUUID = docs.getString("pdfUUID") ?: ""
 
             val getHomePdfList = GetHomePdfInfoHModel (
                 artName,
@@ -100,14 +102,30 @@ class HomePageViewModel(application: Application): AndroidViewModel(application)
                 pdfUrl,
                 pdfBitmapUrl,
                 createdAt,
-                nickname
+                nickname,
+                pdfUUID
             )
-
             takenPdfList.add(getHomePdfList)
+        }
+    }
+
+    private fun getPdfDataFromRoom()
+    {
+        viewModelScope.launch(Dispatchers.IO) {
+            val data = dao.getAll()
             withContext(Dispatchers.Main) {
-                isLoading.value = false
-                pdfList.value = takenPdfList
+                takenPdfList.clear() // Önce listeyi temizleyin
+                takenPdfList.addAll(data)
+                pdfList.value = ArrayList(takenPdfList) // RecyclerView'i güncelleyin
+                isLoadingH.value = false
             }
+        }
+    }
+
+    private fun saveDataIntoRoom(takenPdfList: List<GetHomePdfInfoHModel>) {
+        viewModelScope.launch(Dispatchers.IO) {
+            dao.delteAll()
+            dao.add(takenPdfList)
         }
     }
 }
