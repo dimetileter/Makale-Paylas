@@ -3,18 +3,26 @@ package com.aliosman.makalepaylas.adapter
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.View.OnLongClickListener
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.aliosman.makalepaylas.databinding.RecyclerViewHomeBinding
 import com.aliosman.makalepaylas.model.GetProfilePdfInfoModel
 import com.aliosman.makalepaylas.activities.DownloadPageActivity
+import com.aliosman.makalepaylas.model.SavesPdfModel
+import com.aliosman.makalepaylas.util.OnLongClickRecyclerListener
 import com.aliosman.makalepaylas.util.ToastMessages
 import com.aliosman.makalepaylas.util.downloadImage
 
-class ProfilePageRecyclerAdapter(private var pdfList: ArrayList<GetProfilePdfInfoModel>): RecyclerView.Adapter<ProfilePageRecyclerAdapter.ViewHolder>() {
+class ProfilePageRecyclerAdapter(private var pdfList: ArrayList<GetProfilePdfInfoModel>, private val longClick: OnLongClickRecyclerListener): RecyclerView.Adapter<ProfilePageRecyclerAdapter.ViewHolder>() {
 
     class ViewHolder(val binding: RecyclerViewHomeBinding): RecyclerView.ViewHolder(binding.root) {
-
+        fun longClick(uuid: String, position: Int,  longClickListener: OnLongClickRecyclerListener) {
+            itemView.setOnLongClickListener {
+                longClickListener.onLongClick(uuid,position)
+                true
+            }
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -46,12 +54,18 @@ class ProfilePageRecyclerAdapter(private var pdfList: ArrayList<GetProfilePdfInf
             intent.putExtras(bundle)
             holder.itemView.context.startActivity(intent)
         }
+        holder.longClick(pdfList[position].pdfUUID, position, longClick)
     }
 
-    fun refreshData(newPdfList: ArrayList<GetProfilePdfInfoModel>)
-    {
+    fun refreshData(newPdfList: ArrayList<GetProfilePdfInfoModel>) {
         pdfList.clear()
         pdfList.addAll(newPdfList)
         notifyDataSetChanged()
     }
+
+    fun deleteItem(position: Int) {
+        pdfList.removeAt(position)
+        notifyItemRemoved(position)
+    }
 }
+

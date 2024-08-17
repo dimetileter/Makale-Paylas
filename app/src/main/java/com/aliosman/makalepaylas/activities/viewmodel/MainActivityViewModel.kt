@@ -41,6 +41,7 @@ class MainActivityViewModel(private val application: Application): AndroidViewMo
     var isLoading = MutableLiveData<Boolean>()
     var userInfoList = MutableLiveData<ArrayList<Any?>>()
     var isProfileUpdate = MutableLiveData<Boolean>()
+    var isNicknameUpdate = MutableLiveData<String>()
 
 
     init {
@@ -64,6 +65,11 @@ class MainActivityViewModel(private val application: Application): AndroidViewMo
         saveNewProfilePictureIntoFirebase(newPPUri)
     }
 
+    fun updateNickname(newNickname: String)
+    {
+        saveNewNicknameIntoFirebase(newNickname)
+    }
+
     private fun tryGetUserInformationFromRoom()
     {
         isLoading.value = true
@@ -71,17 +77,15 @@ class MainActivityViewModel(private val application: Application): AndroidViewMo
         viewModelScope.launch {
             val nickname = dao.getNickname()
             val profilePictureByteArray = dao.getProfilePicture()
-            val userUUID = dao.getUserUUID()
-            val currentUserUUID = auth.currentUser?.uid
 
             // Eğer veri tabanı silinmişse ya da kullanıcı değişmişse verileri internet ile güncelle
-            if (nickname != null || userUUID == currentUserUUID)
+            if (nickname != null)
             {
                 withContext(Dispatchers.Main) {
                     isLoading.value = false
                     userInfoList.value = arrayListOf(nickname, profilePictureByteArray)
                     //TODO: ALINAN VERİLER İLGİLİ SINIFA EKLENECEK
-                    Toast.makeText(application,"Kullanıcı verileri room ile alındı. Profil resmi başarıyla alındı", Toast.LENGTH_LONG).show()
+                    Toast.makeText(application,"[Test]Kullanıcı verileri room ile alındı. Profil resmi başarıyla alındı", Toast.LENGTH_LONG).show()
                 }
             }
             else {
@@ -100,44 +104,43 @@ class MainActivityViewModel(private val application: Application): AndroidViewMo
             var nickname: String? = null
             var profilePictureByteArray: ByteArray? = null
 
-                if (it.exists())
-                {
-                    val userName = it.getString("userName")
-                    nickname = it.getString("nickname")
-                    val birthDate = it.getString("birthDate")
-                    val email = it.getString("email")
-                    val userUID = it.getString("userUID")
-                    val profilePictureUrl = it.getString("profilePictureUrl")
-                    val profilePictureUUID = it.getString("profilePictureUUID") ?: ""
+            if (it.exists())
+            {
+                val userName = it.getString("userName")
+                nickname = it.getString("nickname")
+                val birthDate = it.getString("birthDate")
+                val email = it.getString("email")
+                val userUID = it.getString("userUID")
+                val profilePictureUrl = it.getString("profilePictureUrl") ?: ""
+                val profilePictureUUID = it.getString("profilePictureUUID") ?: ""
 
-                    var profilePictureBitmap: Bitmap? = null
-                    if (profilePictureUrl != "")
-                    {
-                        profilePictureBitmap = Picasso.get().load(profilePictureUrl).get()
-                        profilePictureByteArray = BitmapToByteArray().bitmapToByteArray(profilePictureBitmap)
-                        // Eğer burada hata olursa bu yorum satırını aç ve üstteki satırı sil
+                var profilePictureBitmap: Bitmap? = null
+                if (profilePictureUrl != "")
+                {
+                    profilePictureBitmap = Picasso.get().load(profilePictureUrl).get()
+                    profilePictureByteArray = BitmapToByteArray().bitmapToByteArray(profilePictureBitmap)
+                    // Eğer burada hata olursa bu yorum satırını aç ve üstteki satırı sil
 //                        profilePictureBitmap?.let {
 //                            profilePictureByteArray = bitmapToByteArray(profilePictureBitmap)
 //                        }
-
-                    }
-                    else {
-                        profilePictureByteArray = null
-                    }
-
-                    deleteAllUserData()
-                    val saveUserInfo = SaveUserInfoModel(
-                        userName!!,
-                        nickname!!,
-                        birthDate!!,
-                        email!!,
-                        userUID!!,
-                        profilePictureUrl!!,
-                        profilePictureByteArray,
-                        profilePictureUUID
-                    )
-                    dao.insertAll(saveUserInfo)
                 }
+                else {
+                    profilePictureByteArray = null
+                }
+
+                deleteAllUserData()
+                val saveUserInfo = SaveUserInfoModel(
+                    userName!!,
+                    nickname!!,
+                    birthDate!!,
+                    email!!,
+                    userUID!!,
+                    profilePictureUrl,
+                    profilePictureByteArray,
+                    profilePictureUUID
+                )
+                dao.insertAll(saveUserInfo)
+            }
 
             withContext(Dispatchers.Main) {
                 isLoading.value = false
@@ -165,24 +168,24 @@ class MainActivityViewModel(private val application: Application): AndroidViewMo
     private fun saveNewProfilePictureIntoFirebase(uri: Uri)
     {
         viewModelScope.launch(Dispatchers.IO) {
-            val userUuid = auth.currentUser!!.uid
+            val userUUUID = auth.currentUser!!.uid
             val email = auth.currentUser!!.email
             var imageUUID = getProfilePictureUUID() // null dönebilir
 
-            if (imageUUID == null) {
+            if (imageUUID == null || imageUUID == "") {
                 val uuid = UUID.randomUUID()
                 imageUUID = "${uuid}.jpeg"
             }
 
             val referance = storage.reference
-            val imageReferance =referance.child("ProfilePicures").child(email!!).child(imageUUID)
+            val imageReferance =referance.child("ProfilePictures").child(email!!).child(imageUUID)
 
             imageReferance.putFile(uri).addOnSuccessListener {
                 imageReferance.downloadUrl.addOnCompleteListener {
                     if (it.isSuccessful)
                     {
                         val newProfilePicture = it.result.toString()
-                        val userRef = db.collection("Users").document(userUuid)
+                        val userRef = db.collection("Users").document(userUUUID)
 
                         userRef.update("profilePictureUrl", newProfilePicture).addOnSuccessListener {
                             viewModelScope.launch(Dispatchers.Main) {
@@ -190,7 +193,7 @@ class MainActivityViewModel(private val application: Application): AndroidViewMo
                             }
                         }.addOnFailureListener {
                             viewModelScope.launch(Dispatchers.Main) {
-                                ToastMessages(application).showToastShort("Görsel firebase veri tabanına kaydedilemedi")
+                                ToastMessages(application).showToastShort("Görsel kaydedilemedi")
                             }
                         }
                     }
@@ -205,6 +208,27 @@ class MainActivityViewModel(private val application: Application): AndroidViewMo
         }
     }
 
+    private fun saveNewNicknameIntoFirebase(newNickname: String)
+    {
+        viewModelScope.launch(Dispatchers.IO) {
+            val userUUID = auth.currentUser!!.uid
+            val ref = db.collection("Users").document(userUUID)
+            ref.update("nickname", newNickname).addOnSuccessListener {
+                viewModelScope.launch(Dispatchers.Main) {
+                    saveNewNicknameIntoRoom(newNickname)
+                    isNicknameUpdate.value = newNickname
+                }
+            }
+        }
+    }
+
+    private fun saveNewNicknameIntoRoom(newNickname: String)
+    {
+        viewModelScope.launch(Dispatchers.IO) {
+            dao.updateNickname(newNickname)
+        }
+    }
+
     private suspend fun getProfilePictureUUID(): String?
     {
        return dao.getProfilePictureUUID()
@@ -216,5 +240,4 @@ class MainActivityViewModel(private val application: Application): AndroidViewMo
             dao.deleteAll()
         }
     }
-
 }

@@ -35,4 +35,7 @@ interface UserInfoDAO {
 
     @Query("SELECT profilePictureUUID FROM SaveUserInfoModel")
     suspend fun getProfilePictureUUID(): String?
+
+    @Query("UPDATE SaveUserInfoModel SET nickname = :nickname")
+    suspend fun updateNickname(nickname: String)
 }

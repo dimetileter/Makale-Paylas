@@ -21,31 +21,18 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageButton
-        android:id="@+id/settings_button"
-        android:layout_width="42dp"
-        android:layout_height="42dp"
-        android:layout_marginTop="27dp"
-        android:layout_marginEnd="40dp"
-        android:background="@drawable/fun_buttons"
-        android:elevation="4dp"
-        android:foreground="?android:attr/selectableItemBackground"
-        android:onClick="settings_button"
-        android:src="@drawable/ic_settings"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <androidx.cardview.widget.CardView
-        android:layout_width="350dp"
+        android:layout_width="0dp"
+        android:maxWidth="350dp"
         android:layout_height="54dp"
         android:layout_marginStart="30dp"
         android:layout_marginTop="100dp"
         android:layout_marginEnd="30dp"
-        app:cardCornerRadius="10dp"
         app:cardBackgroundColor="@color/light_view_item"
+        app:cardCornerRadius="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" >
+        app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"

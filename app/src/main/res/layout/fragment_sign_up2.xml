@@ -49,41 +49,42 @@
             android:fontFamily="@font/inria_serif_regular"
             android:text="@string/istege_gore_profil_resmi_seciniz"
             android:textColor="@color/white"
-            android:textSize="15sp"
+            android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="@id/constraintLayout_signup2"
             app:layout_constraintStart_toStartOf="@id/constraintLayout_signup2"
             app:layout_constraintTop_toBottomOf="@+id/profile_picture_card" />
 
         <TextView
             android:id="@+id/textView1"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="30dp"
             android:layout_marginTop="110dp"
+            android:layout_marginEnd="10dp"
             android:fontFamily="@font/inria_serif_regular"
             android:text="@string/paylasım_yapacak_mısınız"
             android:textColor="@color/white"
-            android:textSize="15sp"
-            app:layout_constraintStart_toStartOf="@id/constraintLayout_signup2"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toStartOf="@+id/cardView2"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/textView2"
             app:layout_constraintTop_toBottomOf="@+id/textView" />
 
 
         <androidx.cardview.widget.CardView
             android:id="@+id/cardView2"
-            android:layout_width="146dp"
+            android:layout_width="154dp"
             android:layout_height="30dp"
             android:layout_marginTop="105dp"
-            android:layout_marginEnd="30dp"
             app:cardBackgroundColor="@color/light_view_item"
             app:cardCornerRadius="35dp"
             app:cardElevation="4dp"
-            app:layout_constraintEnd_toEndOf="@id/constraintLayout_signup2"
+            app:layout_constraintEnd_toEndOf="@+id/txt_verification"
             app:layout_constraintTop_toBottomOf="@+id/textView">
 
             <RadioGroup
                 android:id="@+id/radiogroup"
-                android:layout_width="146dp"
-                android:layout_height="30dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:orientation="horizontal"
                 tools:layout_editor_absoluteX="236dp"
                 tools:layout_editor_absoluteY="417dp">
@@ -127,7 +128,7 @@
             android:fontFamily="@font/inria_serif_regular"
             android:text="@string/dogrulama_kodu"
             android:textColor="@color/white"
-            android:textSize="15sp"
+            android:textSize="14sp"
             app:layout_constraintBottom_toTopOf="@+id/txt_verification"
             app:layout_constraintStart_toStartOf="@+id/txt_verification" />
 
@@ -135,7 +136,9 @@
             android:id="@+id/txt_verification"
             android:layout_width="350dp"
             android:layout_height="54dp"
+            android:layout_marginStart="30dp"
             android:layout_marginTop="85dp"
+            android:layout_marginEnd="30dp"
             android:background="@drawable/light_view_item"
             android:elevation="4dp"
             android:fontFamily="@font/inria_serif_regular"
@@ -185,7 +188,6 @@
             android:id="@+id/kullanici_aydinlatma_metni"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="30dp"
             android:layout_marginBottom="32dp"
             android:fontFamily="@font/inria_serif_regular"
             android:singleLine="false"
@@ -195,7 +197,7 @@
             android:textIsSelectable="false"
             android:textSize="15sp"
             app:layout_constraintBottom_toBottomOf="@id/constraintLayout_signup2"
-            app:layout_constraintStart_toStartOf="@id/constraintLayout_signup2" />
+            app:layout_constraintStart_toStartOf="@+id/txt_verification" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -242,7 +244,6 @@
                 android:text="@string/yukleme_bilgisi"
                 android:textColor="@color/white"
                 android:textSize="14sp" />
-
         </LinearLayout>
 
     <LinearLayout

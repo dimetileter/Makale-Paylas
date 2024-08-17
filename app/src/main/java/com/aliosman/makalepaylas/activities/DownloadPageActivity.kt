@@ -1,15 +1,23 @@
 package com.aliosman.makalepaylas.activities
 
+import android.Manifest
 import android.app.DownloadManager
 import android.content.Context
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.graphics.Color
+import android.graphics.PorterDuff
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
+import android.text.method.ScrollingMovementMethod
 import android.view.View
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.annotation.Nullable
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ViewModel
@@ -19,6 +27,8 @@ import com.aliosman.makalepaylas.activities.viewmodel.DownloadPageViewModel
 import com.aliosman.makalepaylas.databinding.ActivityDownloadPageBinding
 import com.aliosman.makalepaylas.util.ToastMessages
 import com.aliosman.makalepaylas.util.downloadImage
+import com.aliosman.makalepaylas.util.isInternetAvailable
+import com.google.android.material.snackbar.Snackbar
 import com.squareup.picasso.Picasso
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -30,6 +40,7 @@ class DownloadPageActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityDownloadPageBinding
     private var pdfInfo: ArrayList<String>? = null
+    private val REQUEST_WRITE_STORAGE = 112
 
     var pdfUrl: String? = null
     var pdfDownloadName: String? = null
@@ -79,16 +90,19 @@ class DownloadPageActivity : AppCompatActivity() {
         }
 
         viewModel = ViewModelProvider(this)[DownloadPageViewModel::class.java]
-
+        // Pdf açıklamasını kaydırılabilir yap
+        binding.txtDownloadArticleDescription.setMovementMethod(ScrollingMovementMethod())
+        binding.downloadButton.setOnClickListener {
+            // Medyaya yaz izni
+            checkPermissions()
+        }
     }
 
     //İndirme butonu
-    fun download_button(view: View)
-    {
+    private fun startDownloadPdf() {
         // Eğer pdf ismi boş ise rastgele bir isim ver
         val pdfName = pdfDownloadName
-        if (pdfName == null)
-        {
+        if (pdfName == null) {
             pdfDownloadName = UUID.randomUUID().toString()
         }
 
@@ -104,30 +118,31 @@ class DownloadPageActivity : AppCompatActivity() {
     }
 
     //Paylaşma butonu
-    fun share_download_button(view: View)
-    {
-        Toast.makeText(this, "Paylaşma işlemi tamamlandı", Toast.LENGTH_SHORT).show()
+    fun share_download_button(view: View) {
+        sharePdfByUrl()
     }
 
     //Kaydetme butonu
-    fun save_button(view: View)
-    {
-        observer()
+    fun save_button(view: View) {
         pdfUUID?.let {
             viewModel.addPdfIntoSavesList(it)
+            observer()
         }
     }
 
-    private fun observer()
-    {
+    private fun observer() {
         viewModel.isSuccess.observe(this) {
             // Butonun simgesini dolu bayrak ile değiştir
             val savesButton = binding.saveButton
             savesButton.setImageResource(R.drawable.ic_saved)
-            // Mesajları göster
+
+            // Tost mesajı göster
             val msg = getString(R.string.toast_kaydedildi)
             ToastMessages(this).showToastShort(msg)
-            // TODO: Yanlışlıkla kaydedilmeleri önlemek için bir sncak bar ile geri alınsın mı mesajı gösterilebilir
+
+            // Snackbar ile geri al ifadesi göster
+            val snackmsg = getString(R.string.toast_geri_al)
+            snackbar(binding.root, snackmsg)
         }
 
         viewModel.isError.observe(this) {
@@ -150,4 +165,70 @@ class DownloadPageActivity : AppCompatActivity() {
         ToastMessages(this).showToastShort(msg)
     }
 
+    private fun sharePdfByUrl() {
+        val url = this.pdfUrl
+        val shareIntent = Intent().apply {
+            action = Intent.ACTION_SEND
+            putExtra(Intent.EXTRA_TEXT, url)
+            type = "text/plain"
+        }
+        val msg = getString(R.string.pdf_baglantisini_paylas)
+        this.startActivity(Intent.createChooser(shareIntent, msg))
+    }
+
+    private fun checkPermissions() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+            != PackageManager.PERMISSION_GRANTED) {
+
+            // İzin verilmemişse izin iste
+            ActivityCompat.requestPermissions(this,
+                arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
+                REQUEST_WRITE_STORAGE)
+        } else {
+            // İzin verilmişse indirmeyi başlat
+            // İnternet bağlantısını kontrol et
+            if (isInternetAvailable(this)) {
+                startDownloadPdf()
+            }
+            else {
+                val msg = getString(R.string.toast_internet_baglantisi_yok)
+                ToastMessages(this).showToastShort(msg)
+            }
+        }
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        when (requestCode) {
+            REQUEST_WRITE_STORAGE -> {
+                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // İzin verildiyse ve internet varsa indirmeyi başlat
+                    if (isInternetAvailable(this)) {
+                        startDownloadPdf()
+                    }
+                    else {
+                        val msg = getString(R.string.toast_internet_baglantisi_yok)
+                        ToastMessages(this).showToastShort(msg)
+                    }
+                } else {
+                    // İzin verilmediyse kullanıcıyı bilgilendir
+                    val msg = getString(R.string.toast_permission_denied)
+                    ToastMessages(this).showToastShort(msg)
+                }
+            }
+        }
+    }
+
+    private fun snackbar(view: View, msg: String) {
+        Snackbar.make(view, msg, Snackbar.LENGTH_SHORT)
+            .setBackgroundTint(Color.WHITE)
+            .setAnimationMode(Snackbar.ANIMATION_MODE_FADE)
+            .setTextColor(Color.BLACK)
+            .setActionTextColor(Color.BLUE)
+            .setAction("Ok", View.OnClickListener {
+                viewModel.deletePdfFromSavesList(pdfUUID!!)
+                val savesButton = binding.saveButton
+                savesButton.setImageResource(R.drawable.ic_save)
+            }).show()
+    }
 }

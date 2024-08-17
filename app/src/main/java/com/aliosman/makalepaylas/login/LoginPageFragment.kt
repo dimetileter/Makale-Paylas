@@ -9,10 +9,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
 import com.aliosman.makalepaylas.activities.MainActivity
 import com.aliosman.makalepaylas.R
 import com.aliosman.makalepaylas.databinding.FragmentLoginPageBinding
+import com.aliosman.makalepaylas.login.viewmodel.LoginPageViewModel
+import com.aliosman.makalepaylas.util.progressBarDrawable
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -27,6 +30,7 @@ class LoginPageFragment : Fragment() {
 
     private var _binding: FragmentLoginPageBinding? = null
     private val binding get() = _binding!!
+    private lateinit var viewModel: LoginPageViewModel
 
     private lateinit var auth: FirebaseAuth
     private lateinit var db: FirebaseFirestore
@@ -44,13 +48,9 @@ class LoginPageFragment : Fragment() {
         }
 
         auth = FirebaseAuth.getInstance()
-        db = FirebaseFirestore.getInstance()
         this.currentUser = auth.currentUser
 
-        if (currentUser != null)
-        {
-            checkUserInDatabase(currentUser!!)
-        }
+        viewModel = ViewModelProvider(this)[LoginPageViewModel::class.java]
     }
 
     override fun onCreateView(
@@ -65,8 +65,43 @@ class LoginPageFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        observer()
+        if (currentUser != null) {
+            viewModel.checkInformationRoom(currentUser!!)
+        }
+
         binding.btnGoogleIleGiris.setOnClickListener {
             signIn()
+        }
+    }
+
+    private fun observer()
+    {
+        viewModel.isLoading.observe(viewLifecycleOwner) {
+            if (it)
+            {
+                binding.progressBar.setImageDrawable(progressBarDrawable(requireContext()))
+                binding.loginLoadingScreen.visibility = View.VISIBLE
+                binding.logincardview.visibility = View.GONE
+                binding.appIcon.visibility = View.GONE
+            }
+//            else
+//            {
+//                binding.loginLoadingScreen.visibility = View.GONE
+//                binding.logincardview.visibility = View.VISIBLE
+//                binding.appIcon.visibility = View.VISIBLE
+//            }
+        }
+
+        viewModel.isExists.observe(viewLifecycleOwner) {
+            if (it)
+            {
+                actionToMainActivity()
+            }
+            else
+            {
+                actionToSignUpPage()
+            }
         }
     }
 
@@ -107,7 +142,7 @@ class LoginPageFragment : Fragment() {
                 val message = getString(R.string.toast_olarak_giris_yapiliyor)
                 Toast.makeText(requireContext(), "${user?.displayName}  $message", Toast.LENGTH_SHORT).show()
                 user?.let {
-                    checkUserInDatabase(it)
+                    viewModel.checkInformationRoom(user)
                 }
             }
             else {
@@ -116,27 +151,6 @@ class LoginPageFragment : Fragment() {
             }
         }
     }
-
-    // Kullanıcı bilgilerini kontrol et
-    fun checkUserInDatabase(user: FirebaseUser)
-    {
-        val userRef = db.collection("Users").document(user.uid)
-        userRef.get().addOnSuccessListener {
-            if (it.exists()) {
-                // Kullanıcı mevcut
-                binding.btnGoogleIleGiris.isEnabled = true
-                actionToMainActivity()
-            }else {
-                // Kullanici mevcut değil
-                binding.btnGoogleIleGiris.isEnabled = true
-                actionToSignUpPage()
-            }
-        }
-    // Kullanici sorgulanirken hata meydan geldi
-    // Login ekranında kalmaya devam et
-    }
-
-
 
 
 

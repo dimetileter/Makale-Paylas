@@ -15,6 +15,8 @@ import androidx.lifecycle.ViewModelProvider
 import com.aliosman.makalepaylas.R
 import com.aliosman.makalepaylas.databinding.FragmentUploadPageBinding
 import com.aliosman.makalepaylas.util.ToastMessages
+import com.aliosman.makalepaylas.util.isInternetAvailable
+import com.aliosman.makalepaylas.util.progressBarDrawable
 
 class UploadPageFragment : Fragment() {
 
@@ -71,10 +73,15 @@ class UploadPageFragment : Fragment() {
                 val message = getString(R.string.yukleme_bilgilerini_giriniz)
                 toastMessages.showToastShort(message)
             }
-            else {
-                binding.shareButton.isEnabled = false
-                startSharing()
-
+            else
+            {
+                if (isInternetAvailable(requireContext())) {
+                    binding.shareButton.isEnabled = false
+                    startSharing()
+                } else {
+                    val msg = getString(R.string.toast_internet_baglantisi_yok)
+                    toastMessages.showToastShort(msg)
+                }
             }
         }
         observer()
@@ -101,47 +108,27 @@ class UploadPageFragment : Fragment() {
      */
 
     // View modeli kullanarak paylaşımı başlat
-    private fun startSharing()
-    {
+    private fun startSharing() {
          viewModel.uploadChosenPDF(pdfUri!!, pdfBitmap, articleName!!, articleDescription!!)
     }
 
-    private fun observer()
-    {
+    private fun observer() {
         viewModel.isLoading.observe(viewLifecycleOwner) {
             if (it) {
-                val msg = getString(R.string.toast_yukleniyor)
-                toastMessages.showToastShort(msg)
                 binding.chooseFile.isEnabled = false
                 binding.paylasilanMakaleAdi.isEnabled = false
                 binding.paylasilanMakaleAciklamasi.isEnabled = false
+                binding.shareButton.isEnabled = false
+                binding.progressBar.setImageDrawable(progressBarDrawable(requireContext()))
                 binding.loadingScreen.visibility = View.VISIBLE
             } else {
                 someSettings()
             }
         }
 
-        viewModel.isStorageError.observe(viewLifecycleOwner) {
-            if (it)
-            {
-                val msg = getString(R.string.toast_pdf_yuklenmedi)
-                toastMessages.showToastShort(msg)
-                someSettings()
-            }
-        }
-
-        viewModel.isDatabaseError.observe(viewLifecycleOwner) {
-            if (it)
-            {
-                val msg = getString(R.string.toast_pdf_yulendi_veri_yuklenmedi)
-                toastMessages.showToastShort(msg)
-                someSettings()
-            }
-        }
-
         // TODO: Herhangi bir başarılı yükleme sonrasında upload sayfasına her
         //  gelindiğinde yüklendi mesajı gösteriliyor.
-        viewModel.isSuccessfull.observe(viewLifecycleOwner) {
+        viewModel.isSuccessful.observe(viewLifecycleOwner) {
             if (it) {
                 val msg = getString(R.string.toast_yuklendi)
                 toastMessages.showToastShort(msg)

@@ -59,7 +59,7 @@ class SaveUserInfoViewModel(private val application: Application): AndroidViewMo
                 val referance = storage.reference
                 val email = userInfosHashMap["email"] as String
 
-                val imageReferance = referance.child("ProfilePicures").child(email).child(imageUuid)
+                val imageReferance = referance.child("ProfilePictures").child(email).child(imageUuid)
 
                 //Storage içine resim koy
                 imageReferance.putFile(profilePictureUri!!).addOnSuccessListener {

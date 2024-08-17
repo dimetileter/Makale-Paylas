@@ -10,6 +10,7 @@ import androidx.core.view.WindowInsetsCompat
 import com.aliosman.makalepaylas.R
 import com.aliosman.makalepaylas.databinding.ActivitySearchPageBinding
 import com.aliosman.makalepaylas.databinding.BootmSheetDialogBinding
+import com.aliosman.makalepaylas.util.DataManager
 import com.google.android.material.bottomsheet.BottomSheetDialog
 
 class SearchPageActivity : AppCompatActivity() {
@@ -28,30 +29,7 @@ class SearchPageActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+
+        binding.txtKullaniciAdi.text = DataManager.nickname
     }
-
-    fun settings_button(view: View)
-    {
-        val bottomSheetDialog = BottomSheetDialog(this)
-        val bottomBinding = BootmSheetDialogBinding.inflate(layoutInflater)
-        bottomSheetDialog.setContentView(bottomBinding.root)
-        bottomSheetDialog.show()
-
-        bottomBinding.darkModeButton.setOnClickListener{
-            Toast.makeText(this, "Koyu Mod", Toast.LENGTH_SHORT).show()
-        }
-
-        bottomBinding.changeProfilePictureButton.setOnClickListener{
-            Toast.makeText(this, "Profil Resmini Değiştir", Toast.LENGTH_SHORT).show()
-        }
-
-        bottomBinding.changeNicknameButton.setOnClickListener{
-            Toast.makeText(this, "Kullanıcı Adını Değiştir", Toast.LENGTH_SHORT).show()
-        }
-
-        bottomBinding.exitButton.setOnClickListener{
-            Toast.makeText(this, "Çıkış", Toast.LENGTH_SHORT).show()
-        }
-    }
-
 }

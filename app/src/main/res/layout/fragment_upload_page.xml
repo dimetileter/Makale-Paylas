@@ -13,6 +13,7 @@
         android:layout_width="240dp"
         android:layout_height="240dp"
         android:layout_marginTop="25dp"
+        android:padding="2dp"
         android:background="@drawable/outline"
         android:foreground="?android:attr/selectableItemBackground"
         android:scaleType="centerInside"
@@ -48,7 +49,7 @@
     <EditText
         android:id="@+id/paylasilan_makale_aciklamasi"
         android:layout_width="286dp"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
         android:layout_marginBottom="30dp"
         android:background="@drawable/outline"
@@ -90,9 +91,10 @@
         android:gravity="center"
         android:background="@color/loading_background">
 
-        <ProgressBar
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <ImageView
+            android:id="@+id/progress_bar"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
             android:layout_gravity="center"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

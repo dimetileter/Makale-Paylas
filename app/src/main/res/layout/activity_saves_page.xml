@@ -16,6 +16,22 @@
         tools:context=".activities.SavesPageActivity">
 
         <TextView
+            android:id="@+id/saves_page_kaydedilen_pdf_yok"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:alpha="0.5"
+            android:text="@string/kayit_yok"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="12sp"
+            android:textStyle="italic"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="30dp"
@@ -26,20 +42,6 @@
             android:textSize="20sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
-
-            <ImageButton
-                android:id="@+id/settings_button"
-                android:layout_width="42dp"
-                android:layout_height="42dp"
-                android:layout_marginTop="27dp"
-                android:layout_marginEnd="40dp"
-                android:background="@drawable/fun_buttons"
-                android:elevation="4dp"
-                android:foreground="?android:attr/selectableItemBackground"
-                android:onClick="settings_button"
-                android:src="@drawable/ic_settings"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerViewSaves"

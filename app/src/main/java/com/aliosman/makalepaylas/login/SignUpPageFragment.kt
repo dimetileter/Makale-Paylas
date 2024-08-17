@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
+import android.graphics.Color
 import android.graphics.ImageDecoder
 import android.net.Uri
 import android.os.Build
@@ -110,6 +111,10 @@ class SignUpPageFragment : Fragment() {
             val message = getString(R.string.snack_galeri_izni_gerekli)
             val message2 = getString(R.string.snack_izin_ver)
             Snackbar.make(binding.root, message, Snackbar.LENGTH_LONG)
+                .setBackgroundTint(Color.WHITE)
+                .setAnimationMode(Snackbar.ANIMATION_MODE_FADE)
+                .setTextColor(Color.BLACK)
+                .setActionTextColor(Color.BLUE)
                 .setAction(message2, View.OnClickListener {
                     permissionLauncher.launch(permission)
                 }).show()

@@ -6,13 +6,17 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.aliosman.makalepaylas.activities.DownloadPageActivity
+import com.aliosman.makalepaylas.activities.SavesPageActivity
 import com.aliosman.makalepaylas.databinding.RecyclerViewSavesBinding
 import com.aliosman.makalepaylas.model.SavesPdfModel
+import com.aliosman.makalepaylas.util.OnItemClickListener
 
-class SavePageRecyclerAdapter(private val savesList: ArrayList<SavesPdfModel>): RecyclerView.Adapter<SavePageRecyclerAdapter.ViewHolder>(){
+class SavePageRecyclerAdapter(private val savesList: ArrayList<SavesPdfModel>, private val itemClickListener: OnItemClickListener): RecyclerView.Adapter<SavePageRecyclerAdapter.ViewHolder>(){
 
     class ViewHolder(val binding: RecyclerViewSavesBinding): RecyclerView.ViewHolder(binding.root) {
-
+        fun bind(pdf: SavesPdfModel, clickListener: OnItemClickListener) {
+            clickListener.onItemClick(pdf.pdfUUID)
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -41,6 +45,13 @@ class SavePageRecyclerAdapter(private val savesList: ArrayList<SavesPdfModel>): 
             intent.putExtras(bundle)
             holder.itemView.context.startActivity(intent)
         }
+
+        //Tıklama durumunda kayıtlı verinin silinmesi için pdfUUID'sini gönder
+        holder.binding.unsaveButton.setOnClickListener {
+            holder.bind(savesList[position], itemClickListener)
+            savesList.removeAt(position)
+            notifyDataSetChanged()
+        }
     }
 
     fun refreshAdapter(newList: ArrayList<SavesPdfModel>)
@@ -49,5 +60,4 @@ class SavePageRecyclerAdapter(private val savesList: ArrayList<SavesPdfModel>): 
         savesList.addAll(newList)
         notifyDataSetChanged()
     }
-
 }

@@ -1,6 +1,7 @@
 package com.aliosman.makalepaylas.adapter
 
 import android.content.Intent
+import android.graphics.Bitmap
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -9,6 +10,11 @@ import com.aliosman.makalepaylas.databinding.RecyclerViewHomeBinding
 import com.aliosman.makalepaylas.model.GetHomePdfInfoHModel
 import com.aliosman.makalepaylas.activities.DownloadPageActivity
 import com.aliosman.makalepaylas.util.downloadImage
+import com.squareup.picasso.Picasso
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class HomePageRecyclerAdapter(private val pdfList: ArrayList<GetHomePdfInfoHModel>): RecyclerView.Adapter<HomePageRecyclerAdapter.ViewHolder>() {
 
@@ -28,11 +34,12 @@ class HomePageRecyclerAdapter(private val pdfList: ArrayList<GetHomePdfInfoHMode
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.binding.txtMakaleBasligi.text = pdfList[position].artName
         holder.binding.txtYazar.text = pdfList[position].nickname
-        pdfList[position].pdfBitmapUrl?.let {
-            holder.binding.pdfCoverPicture.downloadImage(it)
-        }
+//        pdfList[position].pdfBitmapUrl?.let {
+//            holder.binding.pdfCoverPicture.downloadImage(it)
+//        }
         holder.itemView.setOnClickListener {
             val intent = Intent(holder.itemView.context, DownloadPageActivity::class.java)
+
 
             // Verielri bundle olarak DownloadPage aktivitesine gönder
             val bundle = Bundle().apply {
@@ -49,10 +56,10 @@ class HomePageRecyclerAdapter(private val pdfList: ArrayList<GetHomePdfInfoHMode
         }
     }
 
-    fun refreshData(newPdfList: ArrayList<GetHomePdfInfoHModel>)
-    {
+    fun refreshData(newPdfList: List<GetHomePdfInfoHModel>) {
         pdfList.clear()
         pdfList.addAll(newPdfList)
         notifyDataSetChanged()
+        //notifyItemRangeChanged(0, newPdfList.size)
     }
 }

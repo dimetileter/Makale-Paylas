@@ -21,8 +21,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.io.File
 import java.io.FileOutputStream
-import java.text.SimpleDateFormat
-import java.util.Locale
 import java.util.UUID
 
 class UploadPageViewModel(private val application: Application): AndroidViewModel(application) {
@@ -42,9 +40,7 @@ class UploadPageViewModel(private val application: Application): AndroidViewMode
 
     var isLoading = MutableLiveData<Boolean>()
 //  var isError = MutableLiveData<Boolean>()
-    var isStorageError = MutableLiveData<Boolean>()
-    var isDatabaseError = MutableLiveData<Boolean>()
-    var isSuccessfull = MutableLiveData<Boolean>()
+    var isSuccessful = MutableLiveData<Boolean>()
 
     init {
         db = FirebaseFirestore.getInstance()
@@ -89,12 +85,11 @@ class UploadPageViewModel(private val application: Application): AndroidViewMode
                     else {
                         viewModelScope.launch(Dispatchers.Main) {
                             isLoading.value = false
-                            isStorageError.value = true
                         }
+                        Log.w(TAG, "PDF dosyası URL adresi alınırken oluşan hata:", it.exception)
                     }
                 }
             }.addOnFailureListener { e->
-                isStorageError.value = true
                 Log.w(TAG, "PDF dosyası storage içine yüklenirken oluşan hata:", e)
             }
         }
@@ -128,8 +123,8 @@ class UploadPageViewModel(private val application: Application): AndroidViewMode
     // Pdf verilerini kaydet
     private suspend fun savePDFDataIntoDatabase(pdfUrl: String, pdfBitmapUrl: String)
     {
-        val date = Timestamp.now().toDate()
-        val time = SimpleDateFormat("dd.MM.yyy HH:mm", Locale.getDefault()).format(date)
+        val time = Timestamp.now()
+        //val time = SimpleDateFormat("dd.MM.yyy HH:mm", Locale.getDefault()).format(date)
         val nickname = getNickName()
 
         viewModelScope.launch(Dispatchers.IO) {
@@ -153,15 +148,15 @@ class UploadPageViewModel(private val application: Application): AndroidViewMode
                     viewModelScope.launch(Dispatchers.Main) {
                         // Yükleme başarılı
                         isLoading.value = false
-                        isSuccessfull.value = true
+                        isSuccessful.value = true
                     }
                 } else {
                     viewModelScope.launch(Dispatchers.Main) {
                         // Yükleme başarısız
                         isLoading.value = false
-                        isDatabaseError.value = true
-                        isSuccessfull.value = false
+                        isSuccessful.value = false
                     }
+                    Log.w(TAG, "Pdf bilgileri database kaydı yapılırken oluşan hata:", it.exception)
                 }
             }.addOnFailureListener { e->
                 Log.w(TAG, "Pdf bilgileri firedatabase kaydı yapılırken oluşan hata:", e)

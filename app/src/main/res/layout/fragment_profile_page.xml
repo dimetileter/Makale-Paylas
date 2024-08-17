@@ -11,87 +11,101 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".ui.profile.ProfilePageFragment">
 
+    <TextView
+        android:id="@+id/profile_page_kaydedilen_pdf_yok"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:alpha="0.5"
+        android:text="@string/baglanti_yok"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="12sp"
+        android:textStyle="italic"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/profile_swipe_refresh"
         android:layout_width="match_parent"
-        android:layout_height="260dp"
+        android:layout_height="210dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:background="@color/background_colour"
-        app:layout_constraintBottom_toTopOf="@+id/view"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <androidx.cardview.widget.CardView
-            android:id="@+id/profile_picture_card"
-            android:layout_width="146dp"
-            android:layout_height="146dp"
-            android:background="@drawable/profile_picture_outline"
-            app:cardBackgroundColor="@color/background_colour"
-            app:cardCornerRadius="70dp"
-            app:cardElevation="12dp"
-            app:layout_constraintBottom_toBottomOf="parent"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:background="@color/background_colour"
+            app:layout_constraintBottom_toTopOf="@+id/view"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.4">
+            app:layout_constraintTop_toTopOf="parent">
 
-            <ImageView
-                android:id="@+id/profile_picture"
+            <androidx.cardview.widget.CardView
+                android:id="@+id/profile_picture_card"
                 android:layout_width="146dp"
                 android:layout_height="146dp"
-                android:background="@android:color/transparent"
+                app:cardCornerRadius="70dp"
+                app:cardBackgroundColor="@color/background_colour"
+                app:cardElevation="12dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.0">
+
+                <ImageView
+                    android:id="@+id/profile_picture"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    app:srcCompat="@drawable/profile_picture" />
+            </androidx.cardview.widget.CardView>
+
+            <ImageButton
+                android:id="@+id/saves_button"
+                android:layout_width="42dp"
+                android:layout_height="42dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginEnd="40dp"
+                android:background="@drawable/fun_buttons"
+                android:elevation="4dp"
                 android:foreground="?android:attr/selectableItemBackground"
-                android:scaleType="centerCrop"
-                app:srcCompat="@drawable/ic_add_profile_picture" />
-        </androidx.cardview.widget.CardView>
+                android:onClick="settings_button"
+                android:src="@drawable/ic_saved"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/profile_picture_card" />
 
-        <ImageButton
-            android:id="@+id/saves_button"
-            android:layout_width="42dp"
-            android:layout_height="42dp"
-            android:layout_marginTop="25dp"
-            android:layout_marginEnd="40dp"
-            android:background="@drawable/fun_buttons"
-            android:elevation="4dp"
-            android:foreground="?android:attr/selectableItemBackground"
-            android:onClick="settings_button"
-            android:src="@drawable/ic_saved"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/profile_picture_card" />
+            <ImageButton
+                android:id="@+id/share_profile_button"
+                android:layout_width="42dp"
+                android:layout_height="42dp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/fun_buttons"
+                android:elevation="4dp"
+                android:foreground="?android:attr/selectableItemBackground"
+                android:onClick="settings_button"
+                android:src="@drawable/ic_share"
+                app:layout_constraintEnd_toEndOf="@+id/saves_button"
+                app:layout_constraintTop_toBottomOf="@+id/saves_button" />
 
-        <ImageButton
-            android:id="@+id/share_profile_button"
-            android:layout_width="42dp"
-            android:layout_height="42dp"
-            android:layout_marginTop="20dp"
-            android:background="@drawable/fun_buttons"
-            android:elevation="4dp"
-            android:foreground="?android:attr/selectableItemBackground"
-            android:onClick="settings_button"
-            android:src="@drawable/ic_share"
-            app:layout_constraintEnd_toEndOf="@+id/saves_button"
-            app:layout_constraintTop_toBottomOf="@+id/saves_button" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:fontFamily="@font/inria_serif_bold"
-            android:text="@string/kullanici_adi"
-            android:textColor="@color/white"
-            android:textSize="20sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/profile_picture_card" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+            <TextView
+                android:id="@+id/profile_nickname"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/inria_serif_bold"
+                android:text="@string/kullanici_adi"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/profile_picture_card" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     <View
         android:id="@+id/view"

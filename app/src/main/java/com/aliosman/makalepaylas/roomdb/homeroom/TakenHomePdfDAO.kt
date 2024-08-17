@@ -12,7 +12,10 @@ interface TakenHomePdfDAO {
     suspend fun getAll(): List<GetHomePdfInfoHModel>
 
     @Insert
-    suspend fun add(data: List<GetHomePdfInfoHModel>)
+    suspend fun add(data: GetHomePdfInfoHModel)
+
+    @Insert
+    suspend fun addAll(data: List<GetHomePdfInfoHModel>)
 
     @Query("DELETE FROM GetHomePdfInfoHModel")
     suspend fun delteAll()

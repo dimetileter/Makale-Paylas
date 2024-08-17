@@ -21,16 +21,20 @@
 
     <androidx.cardview.widget.CardView
         android:id="@+id/logincardview"
-        android:layout_width="350dp"
-        android:layout_height="54dp"
-        android:layout_marginBottom="120dp"
-        app:cardElevation="4dp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp"
+        android:maxWidth="350dp"
         android:outlineAmbientShadowColor="@color/black"
         app:cardBackgroundColor="@color/google_button"
         app:cardCornerRadius="10dp"
+        app:cardElevation="4dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/app_icon"
+        app:layout_constraintVertical_bias="0.8">
 
         <ImageView
             android:layout_width="42dp"
@@ -51,5 +55,36 @@
             android:textColor="@color/white" />
 
     </androidx.cardview.widget.CardView>
+
+    <LinearLayout
+        android:id="@+id/login_loading_screen"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginHorizontal="30dp"
+        android:layout_marginVertical="40dp"
+        android:background="@drawable/outline"
+        android:visibility="gone"
+        android:gravity="center_vertical"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/progressBar"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_gravity="center" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:fontFamily="@font/kanit_regular"
+            android:text="@string/toast_yukleniyor"
+            android:textColor="@color/white"
+            android:textSize="18sp" />
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

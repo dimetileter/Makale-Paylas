@@ -7,20 +7,22 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.aliosman.makalepaylas.R
 import com.aliosman.makalepaylas.adapter.HomePageRecyclerAdapter
 import com.aliosman.makalepaylas.databinding.FragmentHomePageBinding
 import com.aliosman.makalepaylas.model.GetHomePdfInfoHModel
 import com.aliosman.makalepaylas.util.SharedPreferencesManager
 import com.aliosman.makalepaylas.util.ToastMessages
+import com.aliosman.makalepaylas.util.isInternetAvailable
 
 class HomePageFragment : Fragment() {
 
     private var _binding: FragmentHomePageBinding? = null
     private val binding get() = _binding!!
-    private lateinit var adapter: HomePageRecyclerAdapter
-    private var model = ArrayList<GetHomePdfInfoHModel>()
-    private lateinit var viewModel: HomePageViewModel
 
+    private var recyclerAdapter = HomePageRecyclerAdapter(arrayListOf())
+    private lateinit var viewModel: HomePageViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,30 +42,52 @@ class HomePageFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // Eğer internet varsa akışı yenile
         viewModel = ViewModelProvider(requireActivity())[HomePageViewModel::class.java]
 
-        adapter = HomePageRecyclerAdapter(model)
+        if (isInternetAvailable(requireContext()))
+        {
+            binding.homePageBaglantiYok.visibility = View.GONE
+            viewModel.getPdfDataInternet()
+        }
+        else {
+            val msg = getString(R.string.toast_akis_yenilenmedi)
+            ToastMessages(requireContext()).showToastShort(msg)
+            binding.swipeRefreshLayout.isRefreshing = false
+            binding.homePageBaglantiYok.visibility = View.VISIBLE
+            //viewModel.getPdfDataRoom()
+        }
+
+//        // Son yenileme 30 dakikadan daha önce ise otomatik yenile
+//        val time = SharedPreferencesManager(requireContext())
+//        if(time.checkHomeRefreshTime()) {
+//            viewModel.getPdfDataInternet()
+//            time.saveHomeRefreshTime()
+//        }
+//        else {
+//            viewModel.getPdfDataRoom()
+//        }
+
+        // Recyler adapter
         binding.homeRecyclerAdapter.layoutManager = GridLayoutManager(requireContext(), 2)
-        binding.homeRecyclerAdapter.adapter = adapter
+        binding.homeRecyclerAdapter.adapter = recyclerAdapter
 
         observer()
 
-        // Son yenileme 30 dakikadan daha önce ise otomatik yenile
-        val time = SharedPreferencesManager(requireContext())
-        if(time.checkHomeRefreshTime())
-        {
-            viewModel.getPdfDataInternet()
-            time.saveHomeRefreshTime()
-        }
-        else
-        {
-            viewModel.getPdfDataRoom()
-
-        }
-
         binding.swipeRefreshLayout.setOnRefreshListener {
-            viewModel.getPdfDataInternet()
-            time.saveHomeRefreshTime()
+            if (isInternetAvailable(requireContext()))
+            {
+                binding.homePageBaglantiYok.visibility = View.GONE
+                viewModel.getPdfDataInternet()
+                //time.saveHomeRefreshTime()
+            }
+            else {
+                val msg = getString(R.string.toast_akis_yenilenmedi)
+                ToastMessages(requireContext()).showToastShort(msg)
+                binding.swipeRefreshLayout.isRefreshing = false
+                binding.homePageBaglantiYok.visibility = View.VISIBLE
+                //viewModel.getPdfDataRoom()
+            }
         }
     }
 
@@ -83,14 +107,10 @@ class HomePageFragment : Fragment() {
 
         viewModel.isErrorH.observe(viewLifecycleOwner) {
             //TODO: Hata mesajı gösterilecek. Geçiçi olarak tost mesajı yerleştirildi
-            if (it)
-                ToastMessages(requireContext()).showToastShort("Veri alımı sırasında HATA!")
         }
 
         viewModel.pdfList.observe(viewLifecycleOwner) {
-            if(!it.isNullOrEmpty()) {
-                adapter.refreshData(it)
-            }
+            recyclerAdapter.refreshData(it)
         }
     }
 

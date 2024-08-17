@@ -45,16 +45,28 @@
     <string name="secim_yailmadi">Yüklenecek bir PDF dosyası seçiniz</string>
     <string name="yukleme_bilgilerini_giriniz">Yüklemeye başlamadan önce yükleme bilgilerini tamamlayınız</string>
     <string name="hesap_olusturma_hatasi">Hesap oluşturulurken hata meydana geldi. Daha sonra tekrar deneyin :(</string>
+    <string name="kayit_yok">Burası boş görünüyor :/</string>
+    <string name="baglanti_yok">Bağlantı yok :(</string>>
     <string name="toast_yukleniyor">Yükleniyor…</string>
     <string name="toast_yuklendi">Yüklendi</string>
     <string name="toast_pdf_yuklenmedi">Pdf veritabanına yüklenmedi</string>
     <string name="toast_pdf_url_null">PDF bağlantısı alınamadı. Bu PDF hatalı olabilir. Daha sonra tekrar deneyin</string>
-    <string name="toast_baglantinizi_kontrol_edin">İnternet bağlantınızı kontrol edin</string>
     <string name="toast_indirme_baslatildi">İndirme Başlatıldı</string>
     <string name="toast_kaydedildi">Kaydedildi</string>
     <string name="toast_kaydedilemedi">Kaydedilemedi!</string>
+    <string name="toast_kayit_silme_basarili">Kaldırıldı</string>
+    <string name="toast_hata">Hata!</string>
+    <string name="toast_paylasim_yok">Herhangi paylaşım yok</string>
+    <string name="pdf_baglantisini_paylas">Pdf Bağlantısını Paylaş</string>
     <string name="pdf_yukleme_bilgisi">Bu işlem bir kaç dakika sürebilir. Yükleme tamamlanırken uygulamayı kullanabilirsiniz</string>
     <string name="toast_pdf_yulendi_veri_yuklenmedi">"Pdf yüklendi ama bilgileri veri tabanına eklenmedi</string>
+    <string name="toast_kullanici_adlari_ayni_degil">Kullanıcı isimleri uyuşmuyor</string>
+    <string name="toast_bos_birakilamaz">Kullanıcı ismi girilmedi</string>
+    <string name="toast_kullanici_adi_degistirildi">Kullanıcı adı değiştirildi</string>
+    <string name="toast_permission_denied">İndirme yapabilmek için ayarlardan izinleri açın</string>
+    <string name="toast_internet_baglantisi_yok">İnternet bağlantısı yok</string>
+    <string name="toast_akis_yenilenmedi">Bağlantı yok. Akış yenilenmedi</string>
+    <string name="toast_geri_al">Geri al</string>
 
     <string name="ornek">Enerjinin frekans ile çarpımı, Planck sabitiyle (h) çarpılarak bulunur. Yani, E = h * f formülünde,
     E enerjiyi, h Planck sabitini ve f ise frekansı temsil eder. Bu formül, bir fotonun enerjisinin frekansı ile doğru orantılı
@@ -74,4 +86,10 @@
     bir ortam için çalışmaktayız.ºBu yaklaşım elbette ki fikir beyanında bulunmak isteyen kişilerin fikirlerini engellememektedir.
     Fikirlerini ve yazılarınızı her daim paylaşabilirsiniz. Fakat onaylanmış kullanıcılar işinde daha bilgili ve profesyonel
     olarak kabul edilmektedir; okurlar için bir takip sistemi oluşturmaktadır.</string>
+    <string name="sil">Sil</string>
+    <string name="vazgec">Vazgeç</string>
+    <string name="bu_gonderi_kaldirilacak">Bu Gönderi kaldırılacak!</string>
+    <string name="yeni_kullanici_adi">Yeni kullanıcı adı</string>
+    <string name="yeni_kullanici_adi_tekrar">Yeni kullanıcı adı tekrar</string>
+    <string name="onayla">Onayla</string>
 </resources>

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
@@ -100,15 +101,12 @@
     <TextView
         android:id="@+id/txt_download_article_description"
         android:layout_width="286dp"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:layout_marginBottom="20dp"
         android:background="@drawable/outline"
         android:fontFamily="@font/jost_light"
-        android:isScrollContainer="false"
-        android:overScrollMode="ifContentScrolls"
         android:padding="15dp"
-        android:scrollbarAlwaysDrawVerticalTrack="false"
         android:scrollbars="vertical"
         android:text="@string/ornek"
         android:textColor="@color/white"
@@ -116,7 +114,8 @@
         app:layout_constraintBottom_toTopOf="@+id/cardView3"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/download_page_date" />
+        app:layout_constraintTop_toBottomOf="@+id/download_page_date"
+        app:layout_constraintVertical_bias="0.0" />
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView3"
@@ -145,7 +144,6 @@
             android:background="@android:color/transparent"
             android:fontFamily="@font/kanit_regular"
             android:foreground="?android:attr/selectableItemBackground"
-            android:onClick="download_button"
             android:text="@string/indir"
             android:textAlignment="viewStart"
             android:textAllCaps="false"
@@ -154,7 +152,7 @@
     </androidx.cardview.widget.CardView>
 
     <ImageButton
-        android:id="@+id/share_download_button"
+        android:id="@+id/download_page_share_button"
         android:layout_width="42dp"
         android:layout_height="42dp"
         android:layout_marginEnd="6dp"
@@ -178,7 +176,7 @@
         android:foreground="?android:attr/selectableItemBackground"
         android:onClick="save_button"
         android:src="@drawable/ic_save"
-        app:layout_constraintBottom_toTopOf="@+id/share_download_button"
+        app:layout_constraintBottom_toTopOf="@+id/download_page_share_button"
         app:layout_constraintEnd_toEndOf="parent" />
 
 

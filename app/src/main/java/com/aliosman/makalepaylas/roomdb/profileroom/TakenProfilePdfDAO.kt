@@ -17,4 +17,6 @@ interface TakenProfilePdfDAO {
     @Query("DELETE FROM GetProfilePdfInfoModel")
     suspend fun delteAll()
 
+    @Query("DELETE FROM GetProfilePdfInfoModel WHERE pdfUUID = :pdfUUID")
+    suspend fun deletPdf(pdfUUID: String)
 }
