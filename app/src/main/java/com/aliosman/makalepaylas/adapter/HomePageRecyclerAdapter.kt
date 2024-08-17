@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.aliosman.makalepaylas.databinding.RecyclerViewHomeBinding
 import com.aliosman.makalepaylas.model.GetHomePdfInfoHModel
 import com.aliosman.makalepaylas.activities.DownloadPageActivity
+import com.aliosman.makalepaylas.model.HomePagePdfInfo
 import com.aliosman.makalepaylas.util.downloadImage
 import com.squareup.picasso.Picasso
 import kotlinx.coroutines.CoroutineScope
@@ -16,7 +17,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class HomePageRecyclerAdapter(private val pdfList: ArrayList<GetHomePdfInfoHModel>): RecyclerView.Adapter<HomePageRecyclerAdapter.ViewHolder>() {
+class HomePageRecyclerAdapter(private val pdfList: ArrayList<HomePagePdfInfo>): RecyclerView.Adapter<HomePageRecyclerAdapter.ViewHolder>() {
 
     class ViewHolder(val binding: RecyclerViewHomeBinding): RecyclerView.ViewHolder(binding.root) {
 
@@ -33,30 +34,25 @@ class HomePageRecyclerAdapter(private val pdfList: ArrayList<GetHomePdfInfoHMode
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.binding.txtMakaleBasligi.text = pdfList[position].artName
-        holder.binding.txtYazar.text = pdfList[position].nickname
-//        pdfList[position].pdfBitmapUrl?.let {
-//            holder.binding.pdfCoverPicture.downloadImage(it)
-//        }
+        holder.binding.txtYazar.text = pdfList[position].author
+        pdfList[position].pdfBitmapUrl?.let {
+            holder.binding.pdfCoverPicture.downloadImage(it)
+        }
         holder.itemView.setOnClickListener {
             val intent = Intent(holder.itemView.context, DownloadPageActivity::class.java)
-
-
             // Verielri bundle olarak DownloadPage aktivitesine gönder
             val bundle = Bundle().apply {
-                putString("artName", pdfList[position].artName)
-                putString("artDesc", pdfList[position].artDesc)
-                putString("pdfUrl", pdfList[position].pdfUrl)
-                putString("pdfBitmapUrl", pdfList[position].pdfBitmapUrl)
-                putString("createdAt", pdfList[position].createdAt)
-                putString("nickname", pdfList[position].nickname)
                 putString("pdfUUID", pdfList[position].pdfUUID)
+                putString("artName", pdfList[position].artName)
+                putString("nickName", pdfList[position].author)
+                putString("pdfBitmapUrl", pdfList[position].pdfBitmapUrl)
             }
             intent.putExtras(bundle)
             holder.itemView.context.startActivity(intent)
         }
     }
 
-    fun refreshData(newPdfList: List<GetHomePdfInfoHModel>) {
+    fun refreshData(newPdfList: List<HomePagePdfInfo>) {
         pdfList.clear()
         pdfList.addAll(newPdfList)
         notifyDataSetChanged()

@@ -67,6 +67,7 @@
     <string name="toast_internet_baglantisi_yok">İnternet bağlantısı yok</string>
     <string name="toast_akis_yenilenmedi">Bağlantı yok. Akış yenilenmedi</string>
     <string name="toast_geri_al">Geri al</string>
+    <string name="toast_pdf_erisimi_yok">Bu PDF dosyasına artık erişilemiyor</string>
 
     <string name="ornek">Enerjinin frekans ile çarpımı, Planck sabitiyle (h) çarpılarak bulunur. Yani, E = h * f formülünde,
     E enerjiyi, h Planck sabitini ve f ise frekansı temsil eder. Bu formül, bir fotonun enerjisinin frekansı ile doğru orantılı

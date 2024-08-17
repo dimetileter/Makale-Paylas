@@ -6,21 +6,17 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
-import android.graphics.PorterDuff
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
 import android.text.method.ScrollingMovementMethod
 import android.view.View
-import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
-import androidx.annotation.Nullable
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.aliosman.makalepaylas.R
 import com.aliosman.makalepaylas.activities.viewmodel.DownloadPageViewModel
@@ -29,17 +25,14 @@ import com.aliosman.makalepaylas.util.ToastMessages
 import com.aliosman.makalepaylas.util.downloadImage
 import com.aliosman.makalepaylas.util.isInternetAvailable
 import com.google.android.material.snackbar.Snackbar
-import com.squareup.picasso.Picasso
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import java.util.UUID
 
 class DownloadPageActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityDownloadPageBinding
-    private var pdfInfo: ArrayList<String>? = null
     private val REQUEST_WRITE_STORAGE = 112
 
     var pdfUrl: String? = null
@@ -64,23 +57,16 @@ class DownloadPageActivity : AppCompatActivity() {
         val artTitle = binding.txtDownloadPageArticleTitle
         val artCover = binding.downlodPagePdfCoverImage
         val authorName = binding.txtDownloadPageAuthorName
-        val createdAt = binding.downloadPageDate
-        val artDesc = binding.txtDownloadArticleDescription
         var pdfBitmapUrl: String? = null
-
 
         // Gönderilern pdf verilerini al ve ilgili değişkenlere aktar
         val bundle = intent.extras
         bundle?.let {
             artTitle.text = it.getString("artName")
             pdfDownloadName = it.getString("artName")
-
-            artDesc.text = it.getString("artDesc")
-            createdAt.text = it.getString("createdAt")
-            authorName.text = it.getString("nickname")
-            pdfBitmapUrl = it.getString("pdfBitmapUrl")
+            authorName.text = it.getString("nickName")
             pdfUUID = it.getString("pdfUUID")
-            pdfUrl = it.getString("pdfUrl")
+            pdfBitmapUrl = it.getString("pdfBitmapUrl")
         }
 
         CoroutineScope(Dispatchers.Main).launch {
@@ -90,6 +76,9 @@ class DownloadPageActivity : AppCompatActivity() {
         }
 
         viewModel = ViewModelProvider(this)[DownloadPageViewModel::class.java]
+        viewModel.getPdfInfoFromFirebase(pdfUUID!!)
+        observer()
+
         // Pdf açıklamasını kaydırılabilir yap
         binding.txtDownloadArticleDescription.setMovementMethod(ScrollingMovementMethod())
         binding.downloadButton.setOnClickListener {
@@ -148,6 +137,12 @@ class DownloadPageActivity : AppCompatActivity() {
         viewModel.isError.observe(this) {
             val msg = getString(R.string.toast_kaydedilemedi)
             ToastMessages(this).showToastShort(msg)
+        }
+
+        viewModel.data.observe(this) {
+            pdfUrl = it[0] // Url'yi al
+            binding.txtDownloadArticleDescription.text = it[1] // Açıklamayı al
+            binding.downloadPageDate.text = it[2] // Tarihi al
         }
     }
 

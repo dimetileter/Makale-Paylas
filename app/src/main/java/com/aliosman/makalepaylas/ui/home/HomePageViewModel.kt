@@ -1,7 +1,6 @@
 package com.aliosman.makalepaylas.ui.home
 
 import android.app.Application
-import android.nfc.Tag
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
@@ -9,11 +8,11 @@ import androidx.lifecycle.viewModelScope
 import androidx.room.Room
 import com.aliosman.makalepaylas.R
 import com.aliosman.makalepaylas.model.GetHomePdfInfoHModel
+import com.aliosman.makalepaylas.model.HomePagePdfInfo
 import com.aliosman.makalepaylas.roomdb.homeroom.TakenHomePdfDAO
 import com.aliosman.makalepaylas.roomdb.homeroom.TakenHomePdfDatabase
 import com.aliosman.makalepaylas.util.ToastMessages
 import com.google.firebase.Timestamp
-import com.google.firebase.appcheck.internal.util.Logger.TAG
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
@@ -30,9 +29,9 @@ class HomePageViewModel(private val application: Application): AndroidViewModel(
     private var db: FirebaseFirestore = FirebaseFirestore.getInstance()
     private var roomDb: TakenHomePdfDatabase
     private var dao: TakenHomePdfDAO
-    private var takenPdfList = ArrayList<GetHomePdfInfoHModel>()
+    private var takenPdfList = ArrayList<HomePagePdfInfo>()
 
-    var pdfList = MutableLiveData<ArrayList<GetHomePdfInfoHModel>>()
+    var pdfList = MutableLiveData<ArrayList<HomePagePdfInfo>>()
     var isLoadingH = MutableLiveData<Boolean>()
     var isErrorH = MutableLiveData<Boolean>()
 
@@ -57,7 +56,7 @@ class HomePageViewModel(private val application: Application): AndroidViewModel(
 
             try {
                 // Firebase sorgusunu oluştur
-                val pdfRef = db.collection("Posts")
+                val pdfRef = db.collection("Posts").orderBy("createdAt", Query.Direction.DESCENDING)
                 val document = pdfRef.get().await()
 
                 if (!document.isEmpty) {
@@ -65,7 +64,18 @@ class HomePageViewModel(private val application: Application): AndroidViewModel(
                     val documents = document.documents
                     if (documents.isNotEmpty()) {
                         for (docs in documents) {
-                            getDocumentInfos(docs)
+                            val artName = docs.getString("artName") ?: ""
+                            val nickName = docs.getString("nickName") ?: ""
+                            val pdfUrl = docs.getString("pdfBitmapUrl")
+                            val pdfUUID = docs.getString("pdfUUID")
+
+                            val pdfData = HomePagePdfInfo(
+                                artName,
+                                nickName,
+                                pdfUrl,
+                                pdfUUID!!
+                            )
+                            takenPdfList.add(pdfData)
                         }
 
                         // UI güncellemesi
@@ -122,7 +132,7 @@ class HomePageViewModel(private val application: Application): AndroidViewModel(
                 nickname,
                 pdfUUID
             )
-            takenPdfList.add(getHomePdfList)
+            //takenPdfList.add(getHomePdfList)
             //dao.add(getHomePdfList)
         }
     }
@@ -132,7 +142,7 @@ class HomePageViewModel(private val application: Application): AndroidViewModel(
 
         viewModelScope.launch(Dispatchers.IO) {
             val data = dao.getAll()
-            takenPdfList.addAll(data)
+            //takenPdfList.addAll(data)
 
             withContext(Dispatchers.Main) {
                 isLoadingH.value = false
