@@ -4,9 +4,9 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.aliosman.makalepaylas.model.GetProfilePdfInfoModel
+import com.aliosman.makalepaylas.model.ProfilePagePdfInfo
 
-@Database(entities = [GetProfilePdfInfoModel::class], version = 1)
+@Database(entities = [ProfilePagePdfInfo::class], version = 1)
 abstract class TakenProfilePdfDatabase : RoomDatabase() {
     abstract fun userDao(): TakenProfilePdfDAO
 

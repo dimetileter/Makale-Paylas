@@ -3,18 +3,15 @@ package com.aliosman.makalepaylas.adapter
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.View.OnLongClickListener
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.aliosman.makalepaylas.databinding.RecyclerViewHomeBinding
-import com.aliosman.makalepaylas.model.GetProfilePdfInfoModel
+import com.aliosman.makalepaylas.model.ProfilePagePdfInfo
 import com.aliosman.makalepaylas.activities.DownloadPageActivity
-import com.aliosman.makalepaylas.model.SavesPdfModel
 import com.aliosman.makalepaylas.util.OnLongClickRecyclerListener
-import com.aliosman.makalepaylas.util.ToastMessages
 import com.aliosman.makalepaylas.util.downloadImage
 
-class ProfilePageRecyclerAdapter(private var pdfList: ArrayList<GetProfilePdfInfoModel>, private val longClick: OnLongClickRecyclerListener): RecyclerView.Adapter<ProfilePageRecyclerAdapter.ViewHolder>() {
+class ProfilePageRecyclerAdapter(private var pdfList: ArrayList<ProfilePagePdfInfo>, private val longClick: OnLongClickRecyclerListener): RecyclerView.Adapter<ProfilePageRecyclerAdapter.ViewHolder>() {
 
     class ViewHolder(val binding: RecyclerViewHomeBinding): RecyclerView.ViewHolder(binding.root) {
         fun longClick(uuid: String, position: Int,  longClickListener: OnLongClickRecyclerListener) {
@@ -39,15 +36,11 @@ class ProfilePageRecyclerAdapter(private var pdfList: ArrayList<GetProfilePdfInf
         holder.binding.txtMakaleBasligi.text = pdfList[position].artName
         holder.binding.pdfCoverPicture.downloadImage(pdfList[position].pdfBitmapUrl)
         holder.binding.pdf.setOnClickListener {
-
             val intent = Intent(holder.itemView.context, DownloadPageActivity::class.java)
             // Verielri bundle olarak DownloadPage aktivitesine gönder
             val bundle = Bundle().apply {
                 putString("artName", pdfList[position].artName)
-                putString("artDesc", pdfList[position].artDesc)
-                putString("pdfUrl", pdfList[position].pdfUrl)
                 putString("pdfBitmapUrl", pdfList[position].pdfBitmapUrl)
-                putString("createdAt", pdfList[position].createdAt)
                 putString("nickname", pdfList[position].nickname)
                 putString("pdfUUID", pdfList[position].pdfUUID)
             }
@@ -57,7 +50,7 @@ class ProfilePageRecyclerAdapter(private var pdfList: ArrayList<GetProfilePdfInf
         holder.longClick(pdfList[position].pdfUUID, position, longClick)
     }
 
-    fun refreshData(newPdfList: ArrayList<GetProfilePdfInfoModel>) {
+    fun refreshData(newPdfList: ArrayList<ProfilePagePdfInfo>) {
         pdfList.clear()
         pdfList.addAll(newPdfList)
         notifyDataSetChanged()

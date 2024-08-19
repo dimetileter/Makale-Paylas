@@ -18,9 +18,13 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ViewModelProvider
+import androidx.room.Room
 import com.aliosman.makalepaylas.R
 import com.aliosman.makalepaylas.activities.viewmodel.DownloadPageViewModel
 import com.aliosman.makalepaylas.databinding.ActivityDownloadPageBinding
+import com.aliosman.makalepaylas.model.HomePagePdfInfo
+import com.aliosman.makalepaylas.roomdb.homeroom.TakenHomePdfDatabase
+import com.aliosman.makalepaylas.ui.home.HomePageFragment
 import com.aliosman.makalepaylas.util.ToastMessages
 import com.aliosman.makalepaylas.util.downloadImage
 import com.aliosman.makalepaylas.util.isInternetAvailable
@@ -35,9 +39,9 @@ class DownloadPageActivity : AppCompatActivity() {
     private lateinit var binding: ActivityDownloadPageBinding
     private val REQUEST_WRITE_STORAGE = 112
 
-    var pdfUrl: String? = null
-    var pdfDownloadName: String? = null
-    var pdfUUID: String? = null
+    private var pdfUrl: String? = null
+    private var pdfDownloadName: String? = null
+    private var pdfUUID: String? = null
     private lateinit var viewModel: DownloadPageViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -54,33 +58,31 @@ class DownloadPageActivity : AppCompatActivity() {
         }
 
         // Ögelerin tanımlanması
-        val artTitle = binding.txtDownloadPageArticleTitle
-        val artCover = binding.downlodPagePdfCoverImage
-        val authorName = binding.txtDownloadPageAuthorName
         var pdfBitmapUrl: String? = null
 
         // Gönderilern pdf verilerini al ve ilgili değişkenlere aktar
         val bundle = intent.extras
         bundle?.let {
-            artTitle.text = it.getString("artName")
+            binding.txtArticleTitle.text = it.getString("artName")
+            binding.txtAuthorName.text = it.getString("nickName")
             pdfDownloadName = it.getString("artName")
-            authorName.text = it.getString("nickName")
             pdfUUID = it.getString("pdfUUID")
             pdfBitmapUrl = it.getString("pdfBitmapUrl")
-        }
-
-        CoroutineScope(Dispatchers.Main).launch {
-            pdfBitmapUrl?.let {
-               artCover.downloadImage(it)
-            }
         }
 
         viewModel = ViewModelProvider(this)[DownloadPageViewModel::class.java]
         viewModel.getPdfInfoFromFirebase(pdfUUID!!)
         observer()
 
+        val artCover = binding.downlodPagePdfCoverImage
+        CoroutineScope(Dispatchers.Main).launch {
+            pdfBitmapUrl?.let {
+               artCover.downloadImage(it)
+            }
+        }
+
         // Pdf açıklamasını kaydırılabilir yap
-        binding.txtDownloadArticleDescription.setMovementMethod(ScrollingMovementMethod())
+        binding.txtArticleDescription.setMovementMethod(ScrollingMovementMethod())
         binding.downloadButton.setOnClickListener {
             // Medyaya yaz izni
             checkPermissions()
@@ -115,7 +117,6 @@ class DownloadPageActivity : AppCompatActivity() {
     fun save_button(view: View) {
         pdfUUID?.let {
             viewModel.addPdfIntoSavesList(it)
-            observer()
         }
     }
 
@@ -140,9 +141,27 @@ class DownloadPageActivity : AppCompatActivity() {
         }
 
         viewModel.data.observe(this) {
-            pdfUrl = it[0] // Url'yi al
-            binding.txtDownloadArticleDescription.text = it[1] // Açıklamayı al
-            binding.downloadPageDate.text = it[2] // Tarihi al
+
+            if (it.isEmpty()) {
+                binding.downloadButtonCardView.visibility = View.GONE
+                binding.saveButton.visibility = View.GONE
+                binding.downloadPageShareButton.visibility = View.GONE
+
+                val msg = application.getString(R.string.toast_pdf_erisimi_yok)
+                ToastMessages(application).showToastShort(msg)
+
+                // Kaldırılmış olan pdf'i veri tabanından temizle
+                val room = Room.databaseBuilder(this, TakenHomePdfDatabase::class.java, "TakenHomePdf").build()
+                val dao = room.userDao()
+                CoroutineScope(Dispatchers.IO).launch {
+                    dao.deletePdf(pdfUUID!!)
+                }
+            }
+            else {
+                pdfUrl = it[0] // Url'yi al
+                binding.txtArticleDescription.text = it[1] // Açıklamayı al
+                binding.downloadPageDate.text = it[2] // Tarihi al
+            }
         }
     }
 
@@ -217,7 +236,7 @@ class DownloadPageActivity : AppCompatActivity() {
     private fun snackbar(view: View, msg: String) {
         Snackbar.make(view, msg, Snackbar.LENGTH_SHORT)
             .setBackgroundTint(Color.WHITE)
-            .setAnimationMode(Snackbar.ANIMATION_MODE_FADE)
+            .setAnimationMode(Snackbar.ANIMATION_MODE_SLIDE)
             .setTextColor(Color.BLACK)
             .setActionTextColor(Color.BLUE)
             .setAction("Ok", View.OnClickListener {

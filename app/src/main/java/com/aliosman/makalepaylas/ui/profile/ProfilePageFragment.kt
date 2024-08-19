@@ -14,13 +14,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import com.aliosman.makalepaylas.R
 import com.aliosman.makalepaylas.adapter.ProfilePageRecyclerAdapter
 import com.aliosman.makalepaylas.databinding.FragmentProfilePageBinding
-import com.aliosman.makalepaylas.model.GetProfilePdfInfoModel
 import com.aliosman.makalepaylas.activities.SavesPageActivity
 import com.aliosman.makalepaylas.databinding.DeleteAlertDialogBinding
 import com.aliosman.makalepaylas.util.DataManager
@@ -28,6 +26,7 @@ import com.aliosman.makalepaylas.util.OnLongClickRecyclerListener
 import com.aliosman.makalepaylas.util.SharedPreferencesManager
 import com.aliosman.makalepaylas.util.ToastMessages
 import com.aliosman.makalepaylas.util.isInternetAvailable
+import com.aliosman.makalepaylas.util.progressBarDrawable
 
 class ProfilePageFragment : Fragment(), OnLongClickRecyclerListener {
 
@@ -103,15 +102,7 @@ class ProfilePageFragment : Fragment(), OnLongClickRecyclerListener {
 
         // Swipe refresh
         binding.profileSwipeRefresh.setOnRefreshListener {
-            if (isInternetAvailable(requireContext())) {
-                binding.profilePageKaydedilenPdfYok.visibility = View.GONE
-                viewModel.getPdfList()
-                time.saveProfileRefreshTime()
-            }
-            else {
-                binding.profilePageKaydedilenPdfYok.visibility = View.VISIBLE
-                viewModel.getPdfFromRoom()
-            }
+            refreshData()
         }
     }
 
@@ -124,8 +115,7 @@ class ProfilePageFragment : Fragment(), OnLongClickRecyclerListener {
 
         viewModel.isLoadingP.observe(viewLifecycleOwner) {
             // Eğer yükleme yapılıyorsa yükleme tamamlanana kadar yeniden yükleme yapmayı engelle
-            if (it)
-            {
+            if (it) {
                 val swipeRefresh = binding.profileSwipeRefresh
                 swipeRefresh.isRefreshing = true
                 swipeRefresh.isEnabled = false
@@ -148,6 +138,24 @@ class ProfilePageFragment : Fragment(), OnLongClickRecyclerListener {
         viewModel.takenPdf.observe(viewLifecycleOwner) {
                 recyclerAdapter.refreshData(it)
         }
+
+        viewModel.newProfilePicture.observe(viewLifecycleOwner) {
+            it?.let {
+                binding.profilePicture.setImageBitmap(it)
+            }
+        }
+
+//        viewModel.isDeleted.observe(viewLifecycleOwner) {
+//            if (it) {
+//                binding.loadingScreen.visibility = View.GONE
+//                binding.profileRecyclerview.visibility = View.VISIBLE
+//            }
+//            else {
+//                binding.profileRecyclerview.visibility = View.GONE
+//                binding.progressBar.setImageDrawable(progressBarDrawable(requireContext()))
+//                binding.loadingScreen.visibility = View.VISIBLE
+//            }
+//        }
     }
 
     //Kaydet butonu
@@ -195,6 +203,21 @@ class ProfilePageFragment : Fragment(), OnLongClickRecyclerListener {
         }
         else {
             vibrator.vibrate(100)
+        }
+    }
+
+    // Verileri yenile
+    private fun refreshData()
+    {
+        val time = SharedPreferencesManager(requireContext())
+        if (isInternetAvailable(requireContext())) {
+            binding.profilePageKaydedilenPdfYok.visibility = View.GONE
+            viewModel.getPdfList()
+            time.saveProfileRefreshTime()
+        }
+        else {
+            binding.profilePageKaydedilenPdfYok.visibility = View.VISIBLE
+            viewModel.getPdfFromRoom()
         }
     }
 

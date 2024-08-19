@@ -130,15 +130,15 @@ class UploadPageViewModel(private val application: Application): AndroidViewMode
         viewModelScope.launch(Dispatchers.IO) {
 
             val pdfInfos = HashMap<String, Any?>()
-            pdfInfos.put("pdfUrl", pdfUrl)
-            pdfInfos.put("pdfBitmapUrl", pdfBitmapUrl)
-            pdfInfos.put("artName", artName!!)
-            pdfInfos.put("artDesc", artDesc!!)
-            pdfInfos.put("createdAt", time)
-            pdfInfos.put("user", user!!.email!!)
-            pdfInfos.put("userUID", user!!.uid)
-            pdfInfos.put("nickName", nickname)
-            pdfInfos.put("pdfUUID", pdfNameWithUuid!!)
+            pdfInfos["pdfUrl"] = pdfUrl
+            pdfInfos["pdfBitmapUrl"] = pdfBitmapUrl
+            pdfInfos["artName"] = artName!!
+            pdfInfos["artDesc"] = artDesc!!
+            pdfInfos["createdAt"] = time
+            pdfInfos["user"] = user!!.email!!
+            pdfInfos["userUID"] = user!!.uid
+            pdfInfos["nickName"] = nickname
+            pdfInfos["pdfUUID"] = pdfNameWithUuid!!
 
             // PDF verilerini database içine koy
             val ref = db.collection("Posts").document(pdfNameWithUuid!!)
@@ -149,6 +149,7 @@ class UploadPageViewModel(private val application: Application): AndroidViewMode
                         // Yükleme başarılı
                         isLoading.value = false
                         isSuccessful.value = true
+                        isSuccessful.value = false
                     }
                 } else {
                     viewModelScope.launch(Dispatchers.Main) {

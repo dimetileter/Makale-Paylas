@@ -21,10 +21,12 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:id="@+id/txt_download_page_article_title"
+            android:id="@+id/txt__article_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
             android:layout_marginTop="20dp"
+            android:layout_marginEnd="10dp"
             android:fontFamily="@font/inria_serif_regular"
             android:textAlignment="center"
             android:textColor="@color/white"
@@ -41,7 +43,7 @@
             android:background="@color/white"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/txt_download_page_article_title" />
+            app:layout_constraintTop_toBottomOf="@+id/txt__article_title" />
 
 
         <ImageView
@@ -64,14 +66,16 @@
             android:layout_height="1dp"
             android:layout_marginBottom="14dp"
             android:background="@color/white"
-            app:layout_constraintBottom_toTopOf="@+id/txt_download_page_author_name"
+            app:layout_constraintBottom_toTopOf="@+id/txt_author_name"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
         <TextView
-            android:id="@+id/txt_download_page_author_name"
+            android:id="@+id/txt_author_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
             android:layout_marginBottom="22dp"
             android:fontFamily="@font/inria_serif_regular"
             android:textAlignment="center"
@@ -96,7 +100,7 @@
         app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
 
     <TextView
-        android:id="@+id/txt_download_article_description"
+        android:id="@+id/txt_article_description"
         android:layout_width="286dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
@@ -107,14 +111,14 @@
         android:scrollbars="vertical"
         android:textColor="@color/white"
         android:textSize="12sp"
-        app:layout_constraintBottom_toTopOf="@+id/cardView3"
+        app:layout_constraintBottom_toTopOf="@+id/download_button_card_view"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/download_page_date"
         app:layout_constraintVertical_bias="0.0" />
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/cardView3"
+        android:id="@+id/download_button_card_view"
         android:layout_width="107dp"
         android:layout_height="38dp"
         android:layout_marginStart="40dp"

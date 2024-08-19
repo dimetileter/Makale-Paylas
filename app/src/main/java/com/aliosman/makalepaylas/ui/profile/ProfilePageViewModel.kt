@@ -8,14 +8,13 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import androidx.room.Room
 import com.aliosman.makalepaylas.R
-import com.aliosman.makalepaylas.model.GetProfilePdfInfoModel
+import com.aliosman.makalepaylas.model.ProfilePagePdfInfo
 import com.aliosman.makalepaylas.roomdb.profileroom.TakenProfilePdfDAO
 import com.aliosman.makalepaylas.roomdb.profileroom.TakenProfilePdfDatabase
 import com.aliosman.makalepaylas.roomdb.userroom.UserInfoDAO
 import com.aliosman.makalepaylas.roomdb.userroom.UserInfoDatabase
 import com.aliosman.makalepaylas.util.BitmapToByteArray
 import com.aliosman.makalepaylas.util.ToastMessages
-import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
@@ -25,8 +24,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
-import java.text.SimpleDateFormat
-import java.util.Locale
 
 class ProfilePageViewModel(private val application: Application): AndroidViewModel(application) {
 
@@ -36,12 +33,13 @@ class ProfilePageViewModel(private val application: Application): AndroidViewMod
     private val daoUserInfo: UserInfoDAO
     private val daoPdfList: TakenProfilePdfDAO
 
-    private val takenPdfList = ArrayList<GetProfilePdfInfoModel>()
+    private val takenPdfList = ArrayList<ProfilePagePdfInfo>()
 
-    var takenPdf = MutableLiveData<ArrayList<GetProfilePdfInfoModel>>()
+    var takenPdf = MutableLiveData<ArrayList<ProfilePagePdfInfo>>()
     var isErrorP = MutableLiveData<Boolean>()
     var isLoadingP = MutableLiveData<Boolean>()
     var newProfilePicture = MutableLiveData<Bitmap>()
+    var isDeleted = MutableLiveData<Boolean>()
 
     init {
         val database = Room.databaseBuilder(application, UserInfoDatabase::class.java, "UserInfos").build()
@@ -74,14 +72,13 @@ class ProfilePageViewModel(private val application: Application): AndroidViewMod
                 val document = dbRef.get().await()
 
                 if (document.exists()) {
-
-                    val documents = document.get("pdfRef") as? List<String>
+                    val list = document.get("pdfRef") as? List<String>
                     val profilePictureUrl = document.getString("profilePictureUrl")
-                    if (documents != null) {
+                    if (list != null) {
 
                         // Verileri çekmeden önce room veri tabanını temizle
                         daoPdfList.delteAll()
-                        for (docs in documents) {
+                        for (docs in list) {
                             getPdfInfo(docs)
                         }
 
@@ -118,7 +115,8 @@ class ProfilePageViewModel(private val application: Application): AndroidViewMod
                         deleteAllRoom()
                     }
                 }
-            } catch (e: Exception) {
+            }
+            catch (e: Exception) {
                 withContext(Dispatchers.Main) {
                     isLoadingP.value = false
                     isErrorP.value = true
@@ -135,23 +133,14 @@ class ProfilePageViewModel(private val application: Application): AndroidViewMod
                 val document = getPdfRef.get().await()
 
                 if (document.exists()) {
-                    val pdfUrl = document.getString("pdfUrl") ?: ""
                     val pdfBitmapUrl = document.getString("pdfBitmapUrl") ?: ""
-                    val pdfName = document.getString("artName") ?: ""
-                    val pdfDesc = document.getString("artDesc") ?: ""
-                    val createdAt = document.get("createdAt") as Timestamp
+                    val artName = document.getString("artName") ?: ""
                     val nickname = document.getString("nickName") ?: ""
                     val pdfUUID = document.getString("pdfUUID") ?: ""
 
-                    val date = createdAt.toDate()
-                    val createdAtString = SimpleDateFormat("dd.MM.yyy - HH:mm", Locale.getDefault()).format(date)
-
-                    val takenPdfInfo = GetProfilePdfInfoModel(
-                        pdfName,
-                        pdfDesc,
-                        pdfUrl,
+                    val takenPdfInfo = ProfilePagePdfInfo(
+                        artName,
                         pdfBitmapUrl,
-                        createdAtString,
                         nickname,
                         pdfUUID
                     )
@@ -159,9 +148,7 @@ class ProfilePageViewModel(private val application: Application): AndroidViewMod
                     // Alınan verileri array list ve room içine aktar
                     takenPdfList.add(takenPdfInfo)
                     daoPdfList.add(takenPdfInfo)
-//                    withContext(Dispatchers.Main) {
-//                        takenPdf.value = takenPdfList
-//                    }
+
                 }
                 else {
                     withContext(Dispatchers.Main) {
@@ -197,6 +184,7 @@ class ProfilePageViewModel(private val application: Application): AndroidViewMod
     }
 
     private fun deletePdfFromFirebase(pdfUUID: String) {
+        isDeleted.value = false
         viewModelScope.launch(Dispatchers.IO) {
             val userUUID = daoUserInfo.getUserUUID()
             val userEmail = auth.currentUser!!.email.toString()
@@ -220,6 +208,10 @@ class ProfilePageViewModel(private val application: Application): AndroidViewMod
                 Log.d("Firebase koleksiyonlardan silme", "Pdf verileri koleksiyonlardan silindi")
 
                 daoPdfList.deletPdf(pdfUUID)
+
+                withContext(Dispatchers.Main) {
+                    isDeleted.value = true
+                }
             }
             catch (e: Exception) {
                 withContext(Dispatchers.Main) {

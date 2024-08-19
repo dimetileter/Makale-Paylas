@@ -17,7 +17,7 @@ class SharedPreferencesManager(context: Context) {
     {
         val currentTime = System.currentTimeMillis()
         val refreshTime = homeSP.getLong("time", 0)
-        val refreshLimit = 900000 // 30dk'ya tekamül etmektedir
+        val refreshLimit = 300000 // 5 dk'ya tekamül etmektedir
 
         return if(currentTime - refreshTime >= refreshLimit) {
             true // Interneti kullan

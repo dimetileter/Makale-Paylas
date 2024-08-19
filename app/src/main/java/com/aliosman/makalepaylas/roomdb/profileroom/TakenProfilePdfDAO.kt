@@ -3,20 +3,20 @@ package com.aliosman.makalepaylas.roomdb.profileroom
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
-import com.aliosman.makalepaylas.model.GetProfilePdfInfoModel
+import com.aliosman.makalepaylas.model.ProfilePagePdfInfo
 
 @Dao
 interface TakenProfilePdfDAO {
 
-    @Query("SELECT * FROM GetProfilePdfInfoModel")
-    suspend fun getAll(): List<GetProfilePdfInfoModel>
+    @Query("SELECT * FROM ProfilePagePdfInfo")
+    suspend fun getAll(): List<ProfilePagePdfInfo>
 
     @Insert
-    suspend fun add(data: GetProfilePdfInfoModel)
+    suspend fun add(data: ProfilePagePdfInfo)
 
-    @Query("DELETE FROM GetProfilePdfInfoModel")
+    @Query("DELETE FROM ProfilePagePdfInfo")
     suspend fun delteAll()
 
-    @Query("DELETE FROM GetProfilePdfInfoModel WHERE pdfUUID = :pdfUUID")
+    @Query("DELETE FROM ProfilePagePdfInfo WHERE pdfUUID = :pdfUUID")
     suspend fun deletPdf(pdfUUID: String)
 }

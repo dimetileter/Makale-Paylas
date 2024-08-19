@@ -11,7 +11,6 @@ import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.provider.ContactsContract.Data
 import android.provider.MediaStore
 import android.view.View
 import android.widget.ImageView
@@ -33,9 +32,8 @@ import androidx.room.Room
 import com.aliosman.makalepaylas.R
 import com.aliosman.makalepaylas.activities.viewmodel.MainActivityViewModel
 import com.aliosman.makalepaylas.databinding.ActivityMainBinding
-import com.aliosman.makalepaylas.databinding.BootmSheetDialogBinding
 import com.aliosman.makalepaylas.databinding.ChangeNicknameDialogBinding
-import com.aliosman.makalepaylas.roomdb.profileroom.TakenProfilePdfDatabase
+import com.aliosman.makalepaylas.databinding.SettingsBootmSheetDialogBinding
 import com.aliosman.makalepaylas.roomdb.userroom.UserInfoDAO
 import com.aliosman.makalepaylas.roomdb.userroom.UserInfoDatabase
 import com.aliosman.makalepaylas.util.DataManager
@@ -46,10 +44,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import java.io.ByteArrayOutputStream
 
 
 class MainActivity : AppCompatActivity() {
@@ -212,7 +206,7 @@ class MainActivity : AppCompatActivity() {
     // Ayarlar menüsü butonu
     fun settings_button(view: View) {
         val bottomSheetDialog = BottomSheetDialog(this)
-        val bottomBinding = BootmSheetDialogBinding.inflate(layoutInflater)
+        val bottomBinding = SettingsBootmSheetDialogBinding.inflate(layoutInflater)
         bottomSheetDialog.setContentView(bottomBinding.root)
         bottomSheetDialog.show()
 

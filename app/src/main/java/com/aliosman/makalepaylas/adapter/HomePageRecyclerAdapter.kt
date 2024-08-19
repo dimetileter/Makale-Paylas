@@ -1,21 +1,14 @@
 package com.aliosman.makalepaylas.adapter
 
 import android.content.Intent
-import android.graphics.Bitmap
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.aliosman.makalepaylas.databinding.RecyclerViewHomeBinding
-import com.aliosman.makalepaylas.model.GetHomePdfInfoHModel
-import com.aliosman.makalepaylas.activities.DownloadPageActivity
 import com.aliosman.makalepaylas.model.HomePagePdfInfo
+import com.aliosman.makalepaylas.activities.DownloadPageActivity
 import com.aliosman.makalepaylas.util.downloadImage
-import com.squareup.picasso.Picasso
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class HomePageRecyclerAdapter(private val pdfList: ArrayList<HomePagePdfInfo>): RecyclerView.Adapter<HomePageRecyclerAdapter.ViewHolder>() {
 
@@ -34,7 +27,7 @@ class HomePageRecyclerAdapter(private val pdfList: ArrayList<HomePagePdfInfo>): 
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.binding.txtMakaleBasligi.text = pdfList[position].artName
-        holder.binding.txtYazar.text = pdfList[position].author
+        holder.binding.txtYazar.text = pdfList[position].nickname
         pdfList[position].pdfBitmapUrl?.let {
             holder.binding.pdfCoverPicture.downloadImage(it)
         }
@@ -44,7 +37,7 @@ class HomePageRecyclerAdapter(private val pdfList: ArrayList<HomePagePdfInfo>): 
             val bundle = Bundle().apply {
                 putString("pdfUUID", pdfList[position].pdfUUID)
                 putString("artName", pdfList[position].artName)
-                putString("nickName", pdfList[position].author)
+                putString("nickName", pdfList[position].nickname)
                 putString("pdfBitmapUrl", pdfList[position].pdfBitmapUrl)
             }
             intent.putExtras(bundle)

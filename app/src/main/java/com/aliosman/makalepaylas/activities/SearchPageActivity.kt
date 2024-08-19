@@ -1,17 +1,13 @@
 package com.aliosman.makalepaylas.activities
 
 import android.os.Bundle
-import android.view.View
-import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.aliosman.makalepaylas.R
 import com.aliosman.makalepaylas.databinding.ActivitySearchPageBinding
-import com.aliosman.makalepaylas.databinding.BootmSheetDialogBinding
 import com.aliosman.makalepaylas.util.DataManager
-import com.google.android.material.bottomsheet.BottomSheetDialog
 
 class SearchPageActivity : AppCompatActivity() {
 

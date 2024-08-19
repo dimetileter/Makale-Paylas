@@ -40,9 +40,6 @@ class LoginPageViewModel(private val application: Application): AndroidViewModel
         daoUser = roomdb.userDao()
     }
 
-//    fun checkInformation(user: FirebaseUser) {
-//        checkUserInFirebase(user)
-//    }
 
     // Kullanıcı bilgilerini room ile kontrol et
     fun checkInformationRoom(user: FirebaseUser) {
@@ -112,7 +109,7 @@ class LoginPageViewModel(private val application: Application): AndroidViewModel
 
                     // Önceki kullanıcının verilerini sil
                     daoUser.deleteAll()
-                    daoHome.delteAll()
+                    daoHome.deleteAll()
                     daoProfile.delteAll()
 
                     // Yeni kullanıcıyı kontrol et

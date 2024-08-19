@@ -133,8 +133,7 @@ class DownloadPageViewModel(private val application: Application): AndroidViewMo
                 }
                 else {
                     withContext(Dispatchers.Main) {
-                        val msg = application.getString(R.string.toast_pdf_erisimi_yok)
-                        ToastMessages(application).showToastShort(msg)
+                        data.value = arrayListOf()
                     }
                 }
             }
