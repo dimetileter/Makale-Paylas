@@ -1,8 +1,24 @@
 package com.aliosman.makalepaylas.model
 
-data class HomePagePdfInfo (
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+
+@Entity
+data class GetHomePdfInfoHModel(
+
+    @ColumnInfo(name = "pdfUUID")
+    val pdfUUID: String,
+
+    @ColumnInfo(name = "artName")
     val artName: String,
-    val author: String,
+
+    @ColumnInfo(name = "nickname")
+    val nickname: String,
+
+    @ColumnInfo(name = "pdfUrlBitmap")
     val pdfBitmapUrl: String?,
-    val pdfUUID: String
-)
+
+){
+    @PrimaryKey (autoGenerate = true) var id = 0
+}
