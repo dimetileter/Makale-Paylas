@@ -53,10 +53,10 @@ class HomePageViewModel(private val application: Application): AndroidViewModel(
                 // Firebase sorgusunu oluştur
                 val pdfRef = db.collection("Posts").orderBy("createdAt", Query.Direction.DESCENDING)
                 val document = pdfRef.get().await()
+                deleteAllRoom()
 
                 if (!document.isEmpty) {
                     // Dokümanları al
-                    deleteAllRoom()
                     val documents = document.documents
                     if (documents.isNotEmpty()) {
                         var i = 0

@@ -35,6 +35,7 @@ class UploadPageViewModel(private val application: Application): AndroidViewMode
     private var pdfBitmap: Bitmap? = null
     private var artName: String? = null
     private var artDesc: String? = null
+    private var categories: ArrayList<String>? = null
     private var user: FirebaseUser? = null
     private var pdfNameWithUuid: String? = null
 
@@ -52,8 +53,9 @@ class UploadPageViewModel(private val application: Application): AndroidViewMode
     }
 
     // Bir önceki fragmanda null kontrolleri yapıldı
-    fun uploadChosenPDF(pdfUri: Uri, pdfBitmap: Bitmap?, artName: String, artDesc: String)
+    fun uploadChosenPDF(pdfUri: Uri, pdfBitmap: Bitmap?, artName: String, artDesc: String, categories: ArrayList<String>)
     {
+        this.categories = categories
         this.pdfUri = pdfUri
         this.pdfBitmap = pdfBitmap
         this.artName = artName
@@ -139,6 +141,7 @@ class UploadPageViewModel(private val application: Application): AndroidViewMode
             pdfInfos["userUID"] = user!!.uid
             pdfInfos["nickName"] = nickname
             pdfInfos["pdfUUID"] = pdfNameWithUuid!!
+            pdfInfos["categories"] = categories!!
 
             // PDF verilerini database içine koy
             val ref = db.collection("Posts").document(pdfNameWithUuid!!)

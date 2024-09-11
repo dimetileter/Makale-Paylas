@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+    <style name="CustomDatePickerDialogTheme" parent="Theme.MaterialComponents.Light.Dialog">
+        <!-- Dialog background color -->
+        <item name="android:background">@color/outline</item>
+
+        <!-- DatePicker background color -->
+        <item name="android:datePickerStyle">@style/CustomDatePicker</item>
+    </style>
+
+    <style name="CustomDatePicker" parent="Widget.Material3.MaterialCalendar">
+        <item name="android:background">@color/outline</item>
+    </style>
+</resources>
+
+

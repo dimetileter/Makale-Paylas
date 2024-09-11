@@ -104,7 +104,7 @@
         android:layout_width="286dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:layout_marginBottom="20dp"
+        android:layout_marginBottom="50dp"
         android:background="@drawable/outline"
         android:fontFamily="@font/jost_light"
         android:padding="15dp"
@@ -116,6 +116,20 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/download_page_date"
         app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/txt_categories"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:fontFamily="@font/jost_light"
+        android:textColor="@color/white"
+        android:textSize="12sp"
+        android:textStyle="italic"
+        app:layout_constraintEnd_toEndOf="@+id/txt_article_description"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/txt_article_description"
+        app:layout_constraintTop_toBottomOf="@+id/txt_article_description" />
 
     <androidx.cardview.widget.CardView
         android:id="@+id/download_button_card_view"

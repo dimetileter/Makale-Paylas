@@ -8,6 +8,7 @@ import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.ImageDecoder
 import android.graphics.drawable.ColorDrawable
+import android.icu.util.TimeZone.SystemTimeZoneType
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -33,6 +34,7 @@ import com.aliosman.makalepaylas.R
 import com.aliosman.makalepaylas.activities.viewmodel.MainActivityViewModel
 import com.aliosman.makalepaylas.databinding.ActivityMainBinding
 import com.aliosman.makalepaylas.databinding.ChangeNicknameDialogBinding
+import com.aliosman.makalepaylas.databinding.SendFeedbackDialogBinding
 import com.aliosman.makalepaylas.databinding.SettingsBootmSheetDialogBinding
 import com.aliosman.makalepaylas.roomdb.userroom.UserInfoDAO
 import com.aliosman.makalepaylas.roomdb.userroom.UserInfoDatabase
@@ -43,7 +45,16 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 
 class MainActivity : AppCompatActivity() {
@@ -52,6 +63,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var navController: NavController
     private lateinit var viewModel: MainActivityViewModel
     private lateinit var auth: FirebaseAuth
+    private lateinit var firebaseDatabase: FirebaseFirestore
     private lateinit var dao: UserInfoDAO
     private lateinit var db: UserInfoDatabase
 
@@ -222,6 +234,10 @@ class MainActivity : AppCompatActivity() {
             changeNickname()
         }
 
+        bottomBinding.sendFeedbackButton.setOnClickListener {
+            sendFeedback()
+        }
+
         bottomBinding.exitButton.setOnClickListener {
             signOut()
 //            deleteAllRoomData()
@@ -281,7 +297,6 @@ class MainActivity : AppCompatActivity() {
         val backgroundDrawable = ColorDrawable(Color.TRANSPARENT)
         alertDialog.window?.setBackgroundDrawable(backgroundDrawable)
 
-
         alertBinding.newNicknameOkay.setOnClickListener {
             val firstName = alertBinding.newNicknameFirst.text.toString()
             val secondName = alertBinding.newNicknameSecond.text.toString()
@@ -307,29 +322,88 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    // Geri bildirim gönder
+    private fun sendFeedback() {
+        val dialog = AlertDialog.Builder(this).create()
+        val dialogBinding = SendFeedbackDialogBinding.inflate(layoutInflater)
+        dialog.setView(dialogBinding.root)
+        dialog.setCancelable(false)
+
+
+
+        // Geri bildirim göndermeyi onayla
+        dialogBinding.buttonSend.setOnClickListener {
+            val feedbackText = dialogBinding.feedback.text.toString()
+
+            if (!feedbackText.isNullOrEmpty()) {
+                dialogBinding.buttonCancel.isEnabled = false
+                dialogBinding.buttonSend.isEnabled = false
+                dialogBinding.progressBar.setImageDrawable(progressBarDrawable(this))
+                firebaseDatabase = FirebaseFirestore.getInstance()
+
+                // Verinin oluşturulması
+                val userName = auth.currentUser!!.displayName!!
+                val userEmail = auth.currentUser!!.email!!
+                val date = Timestamp.now().toDate()
+                val dateString = SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.getDefault()).format(date)
+
+                val feedback = hashMapOf<String, String>(
+                    "userName" to userName,
+                    "userEmail" to userEmail,
+                    "feedback" to feedbackText,
+                    "date" to dateString
+                )
+
+                CoroutineScope(Dispatchers.IO).launch {
+                    val ref = firebaseDatabase.collection("Feedbacks").document(userEmail)
+
+                    ref.set(feedback).addOnSuccessListener {
+                        CoroutineScope(Dispatchers.Main).launch {
+                            dialogBinding.buttonCancel.isEnabled = true
+                            dialogBinding.progressBar.setImageDrawable(null)
+                            dialog.dismiss()
+                            ToastMessages(this@MainActivity).showToastShort("📨")
+                        }
+                    }.addOnFailureListener {
+                        CoroutineScope(Dispatchers.Main).launch {
+                            dialogBinding.buttonCancel.isEnabled = true
+                            dialogBinding.progressBar.setImageDrawable(null)
+                            dialog.dismiss()
+                            val msg = getString(R.string.toast_hata)
+                            ToastMessages(this@MainActivity).showToastShort(msg)
+                        }
+                    }
+                }
+            }
+        }
+
+        // Geri bildirim göndermeyi iptal et
+        dialogBinding.buttonCancel.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        // Arkaplanı ayarla ve dialogu başlat
+        val backgroundDrawable = ColorDrawable(Color.TRANSPARENT)
+        dialog.window?.setBackgroundDrawable(backgroundDrawable)
+        dialog.show()
+    }
+
     /////////////////////////////////////////////////////////////////////////
     // Galeri İznini kontrol et
     private fun checkGalleryPermission() {
-        if (Build.VERSION.SDK_INT >= 33)
-        {
-            if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_MEDIA_IMAGES) != PackageManager.PERMISSION_GRANTED)
-            {
+        if (Build.VERSION.SDK_INT >= 33) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_MEDIA_IMAGES) != PackageManager.PERMISSION_GRANTED) {
                 askForGalleryPermission(Manifest.permission.READ_MEDIA_IMAGES)
             }
-            else
-            {
+            else {
                 galleryIntent()
             }
-
         }
-        else
-        {
-            if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)
-            {
+        else {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                 askForGalleryPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
             }
-            else
-            {
+            else {
                 galleryIntent()
             }
         }
@@ -337,8 +411,7 @@ class MainActivity : AppCompatActivity() {
 
     // Galeri İznini kontrol et
     private fun askForGalleryPermission(permission: String) {
-        if(ActivityCompat.shouldShowRequestPermissionRationale(this, permission))
-        {
+        if(ActivityCompat.shouldShowRequestPermissionRationale(this, permission)) {
             val message = getString(R.string.snack_galeri_izni_gerekli)
             val message2 = getString(R.string.snack_izin_ver)
             Snackbar.make(binding.root, message, Snackbar.LENGTH_LONG)
@@ -350,8 +423,7 @@ class MainActivity : AppCompatActivity() {
                     permissionLauncher.launch(permission)
                 }).show()
         }
-        else
-        {
+        else {
             permissionLauncher.launch(permission)
         }
     }

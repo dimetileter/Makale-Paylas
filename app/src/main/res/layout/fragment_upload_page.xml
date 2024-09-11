@@ -1,10 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+
+<ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/background_colour"
+    android:orientation="vertical">
+
+<androidx.constraintlayout.widget.ConstraintLayout
+
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
     android:background="@color/background_colour"
     tools:context=".ui.upload.UploadPageFragment">
 
@@ -36,6 +44,7 @@
         android:maxHeight="60dp"
         android:maxLength="50"
         android:maxLines="1"
+        android:inputType="text"
         android:minHeight="40dp"
         android:paddingHorizontal="15dp"
         android:singleLine="true"
@@ -51,7 +60,6 @@
         android:layout_width="286dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
-        android:layout_marginBottom="30dp"
         android:background="@drawable/outline"
         android:fontFamily="@font/jost_light"
         android:gravity="start"
@@ -60,16 +68,15 @@
         android:textColor="@color/white"
         android:textColorHint="@color/light_view_item"
         android:textSize="15sp"
-        app:layout_constraintBottom_toTopOf="@+id/share_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/paylasilan_makale_adi"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toBottomOf="@+id/paylasilan_makale_adi" />
 
     <Button
         android:id="@+id/share_button"
         android:layout_width="107dp"
         android:layout_height="38dp"
+        android:layout_marginTop="50dp"
         android:layout_marginBottom="50dp"
         android:background="@drawable/light_view_item"
         android:fontFamily="@font/kanit_regular"
@@ -80,16 +87,107 @@
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/checkBox_felsefe" />
+
+    <CheckBox
+        android:id="@+id/checkBox_teoloji"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:buttonTint="@color/white"
+        android:fontFamily="@font/jost_light"
+        android:text="@string/teoloji"
+        android:textColor="@color/white"
+        app:layout_constraintStart_toStartOf="@+id/paylasilan_makale_aciklamasi"
+        app:layout_constraintTop_toBottomOf="@+id/paylasilan_makale_aciklamasi" />
+
+    <CheckBox
+        android:id="@+id/checkBox_kisisel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:buttonTint="@color/white"
+        android:fontFamily="@font/jost_light"
+        android:text="@string/kisisel"
+        android:textColor="@color/white"
+        app:layout_constraintEnd_toEndOf="@+id/paylasilan_makale_aciklamasi"
+        app:layout_constraintTop_toBottomOf="@+id/paylasilan_makale_aciklamasi" />
+
+    <CheckBox
+        android:id="@+id/checkBox_teknoloji"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:buttonTint="@color/white"
+        android:fontFamily="@font/jost_light"
+        android:text="@string/teknoloji"
+        android:textColor="@color/white"
+        app:layout_constraintEnd_toStartOf="@+id/checkBox_elestiri"
+        app:layout_constraintStart_toEndOf="@+id/checkBox_politik"
+        app:layout_constraintTop_toBottomOf="@+id/checkBox_akademik" />
+
+    <CheckBox
+        android:id="@+id/checkBox_akademik"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:buttonTint="@color/white"
+        android:fontFamily="@font/jost_light"
+        android:text="@string/akademik"
+        android:textColor="@color/white"
+        app:layout_constraintEnd_toStartOf="@+id/checkBox_kisisel"
+        app:layout_constraintStart_toEndOf="@+id/checkBox_teoloji"
+        app:layout_constraintTop_toBottomOf="@+id/paylasilan_makale_aciklamasi" />
+
+    <CheckBox
+        android:id="@+id/checkBox_politik"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:buttonTint="@color/white"
+        android:fontFamily="@font/jost_light"
+        android:text="@string/politik"
+        android:textColor="@color/white"
+        app:layout_constraintStart_toStartOf="@+id/checkBox_teoloji"
+        app:layout_constraintTop_toBottomOf="@+id/checkBox_teoloji" />
+
+    <CheckBox
+        android:id="@+id/checkBox_elestiri"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:buttonTint="@color/white"
+        android:fontFamily="@font/jost_light"
+        android:text="@string/elestiri"
+        android:textColor="@color/white"
+        app:layout_constraintStart_toStartOf="@+id/checkBox_kisisel"
+        app:layout_constraintTop_toBottomOf="@+id/checkBox_kisisel" />
+
+    <CheckBox
+        android:id="@+id/checkBox_felsefe"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:buttonTint="@color/white"
+        android:fontFamily="@font/jost_light"
+        android:text="@string/felsefe"
+        android:textColor="@color/white"
+        app:layout_constraintStart_toStartOf="@+id/checkBox_politik"
+        app:layout_constraintTop_toBottomOf="@+id/checkBox_politik" />
 
     <LinearLayout
         android:id="@+id/loading_screen"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="gone"
-        android:orientation="vertical"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/loading_background"
         android:gravity="center"
-        android:background="@color/loading_background">
+        android:orientation="vertical"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
             android:id="@+id/progress_bar"
@@ -105,13 +203,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:textAlignment="center"
             android:layout_marginHorizontal="10dp"
             android:fontFamily="@font/jost_light"
             android:text="@string/pdf_yukleme_bilgisi"
+            android:textAlignment="center"
             android:textColor="@color/white"
             android:textSize="14sp" />
-
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

@@ -129,7 +129,7 @@
         app:layout_constraintBottom_toTopOf="@+id/txt_birth_date"
         app:layout_constraintStart_toStartOf="@+id/txt_birth_date" />
 
-    <EditText
+    <TextView
         android:id="@+id/txt_birth_date"
         android:layout_width="match_parent"
         android:maxWidth="350dp"
@@ -139,12 +139,11 @@
         android:layout_marginEnd="30dp"
         android:background="@drawable/light_view_item"
         android:elevation="4dp"
-        android:ems="10"
-        android:fontFamily="@font/kanit_regular"
-        android:inputType="datetime|date"
-        android:maxLines="1"
+        android:textSize="18sp"
+        android:fontFamily="@font/inria_serif_regular"
         android:paddingStart="15dp"
         android:paddingEnd="15dp"
+        android:gravity="center_vertical"
         android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

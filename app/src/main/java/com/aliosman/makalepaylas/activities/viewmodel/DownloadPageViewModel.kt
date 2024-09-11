@@ -117,6 +117,7 @@ class DownloadPageViewModel(private val application: Application): AndroidViewMo
                     val artDesc = result.getString("artDesc") ?: ""
                     val pdfUrl = result.getString("pdfUrl") ?: ""
                     val createdAt = result.get("createdAt") as Timestamp
+                    val categories = result.get("categories") as ArrayList<String>
 
                     val date = createdAt.toDate()
                     val createdAtString = SimpleDateFormat("dd.MM.yyyy - HH:mm", Locale.getDefault()).format(date)
@@ -124,7 +125,8 @@ class DownloadPageViewModel(private val application: Application): AndroidViewMo
                     val list = arrayListOf<String>(
                         pdfUrl,
                         artDesc,
-                        createdAtString
+                        createdAtString,
+                        categories.toString()
                     )
 
                     withContext(Dispatchers.Main) {

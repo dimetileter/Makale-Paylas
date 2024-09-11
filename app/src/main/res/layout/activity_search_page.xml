@@ -23,12 +23,13 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.cardview.widget.CardView
+        android:id="@+id/cardView3"
         android:layout_width="0dp"
-        android:maxWidth="350dp"
         android:layout_height="54dp"
         android:layout_marginStart="30dp"
         android:layout_marginTop="100dp"
         android:layout_marginEnd="30dp"
+        android:maxWidth="350dp"
         app:cardBackgroundColor="@color/light_view_item"
         app:cardCornerRadius="10dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -68,6 +69,7 @@
                 android:layout_width="250dp"
                 android:layout_height="38dp"
                 android:layout_marginStart="1dp"
+                android:layout_marginEnd="5dp"
                 android:background="@android:color/transparent"
                 android:fontFamily="@font/jost_light"
                 android:imeOptions="actionSearch"
@@ -82,4 +84,34 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp"
+        android:fontFamily="@font/inria_serif_regular"
+        android:text="[Test]: Şuanlık sadece PDF isimlerine göre arama yapılmaktadır. Yakında diğer sorgu modelleri eklenecektir"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="12sp"
+        android:paddingVertical="8dp"
+        android:background="@drawable/outline"
+        app:layout_constraintBottom_toTopOf="@+id/searchRecyclerView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cardView3" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/searchRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="80dp"
+        android:layout_marginBottom="5dp"
+        android:paddingStart="42dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cardView3" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

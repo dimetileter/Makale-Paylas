@@ -43,12 +43,13 @@
     <string name="toast_hesap_olusturulmadi">Hesap oluşturulamadı. Tekrar deneyin</string>
     <string name="toast_profil_resmi_degistirildi">Profil resmi değiştirildi</string>
     <string name="secim_yailmadi">Yüklenecek bir PDF dosyası seçiniz</string>
-    <string name="yukleme_bilgilerini_giriniz">Yüklemeye başlamadan önce yükleme bilgilerini tamamlayınız</string>
+    <string name="yukleme_bilgilerini_giriniz">Paylaşım bilgileri eksik</string>
     <string name="hesap_olusturma_hatasi">Hesap oluşturulurken hata meydana geldi. Daha sonra tekrar deneyin :(</string>
     <string name="kayit_yok">Burası boş görünüyor :/</string>
     <string name="baglanti_yok">Bağlantı yok :(</string>>
     <string name="toast_yukleniyor">Yükleniyor…</string>
     <string name="toast_yuklendi">Yüklendi</string>
+    <string name="toast_en_az_uc_kategori">En az 3 kategori seçin</string>
     <string name="toast_pdf_yuklenmedi">Pdf veritabanına yüklenmedi</string>
     <string name="toast_pdf_url_null">PDF bağlantısı alınamadı. Bu PDF hatalı olabilir. Daha sonra tekrar deneyin</string>
     <string name="toast_indirme_baslatildi">İndirme Başlatıldı</string>
@@ -93,4 +94,14 @@
     <string name="yeni_kullanici_adi">Yeni kullanıcı adı</string>
     <string name="yeni_kullanici_adi_tekrar">Yeni kullanıcı adı tekrar</string>
     <string name="onayla">Onayla</string>
+    <string name="teoloji">Teoloji</string>
+    <string name="kisisel">Kişisel</string>
+    <string name="teknoloji">Teknoloji</string>
+    <string name="akademik">Akademik</string>
+    <string name="politik">Politik</string>
+    <string name="elestiri">Eleştiri</string>
+    <string name="felsefe">Felsefe</string>
+    <string name="geri_bildirim_gonder">Geri bildirim gönder</string>
+    <string name="gonder">Gönder</string>
+    <string name="geri_bildirim_bilgi_metni">Geribildirim gönderildiğinde, daha doğru bir hata yönetimi için gönderilme tarihi ve kullanıcı ismi gibi bazı bilgiler de gönderilmektedir.</string>
 </resources>

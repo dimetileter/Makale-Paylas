@@ -29,7 +29,7 @@
 
         <FrameLayout
             android:id="@+id/frameLayout2"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="50dp"
             android:layout_marginStart="30dp"
             android:layout_marginTop="30dp"
@@ -131,7 +131,46 @@
                 android:fontFamily="@font/kanit_regular"
                 android:foreground="?android:attr/selectableItemBackground"
                 android:paddingStart="20dp"
+                android:paddingEnd="20dp"
                 android:text="@string/kullanici_ismini_degistir"
+                android:textAlignment="viewStart"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="15sp" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/frameLayout6"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="30dp"
+            android:background="@drawable/fun_buttons"
+            android:elevation="4dp"
+            android:gravity="center_horizontal"
+            android:maxWidth="350dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/frameLayout4">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center|end"
+                android:layout_marginEnd="12dp"
+                app:srcCompat="@drawable/baseline_feedback_24" />
+
+            <Button
+                android:id="@+id/send_feedback_button"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@android:color/transparent"
+                android:fontFamily="@font/kanit_regular"
+                android:foreground="?android:attr/selectableItemBackground"
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp"
+                android:text="@string/geri_bildirim_gonder"
                 android:textAlignment="viewStart"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
@@ -152,7 +191,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/frameLayout4">
+            app:layout_constraintTop_toBottomOf="@+id/frameLayout6">
 
             <ImageView
                 android:layout_width="wrap_content"

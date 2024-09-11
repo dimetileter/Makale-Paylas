@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.CheckBox
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import com.aliosman.makalepaylas.R
@@ -63,6 +64,7 @@ class UploadPageFragment : Fragment() {
 
             articleName = binding.paylasilanMakaleAdi.text.toString()
             articleDescription = binding.paylasilanMakaleAciklamasi.text.toString()
+            val chosenList = checkboxChecker()
 
             // TODO: İnternet bağlantısı kontrolü ekle
             if(pdfUri == null) {
@@ -73,12 +75,17 @@ class UploadPageFragment : Fragment() {
                 val message = getString(R.string.yukleme_bilgilerini_giriniz)
                 toastMessages.showToastShort(message)
             }
-            else
+            else if (chosenList .isNullOrEmpty())
             {
+                val msg = getString(R.string.toast_en_az_uc_kategori)
+                ToastMessages(requireContext()).showToastShort(msg)
+            }
+            else {
                 if (isInternetAvailable(requireContext())) {
                     binding.shareButton.isEnabled = false
-                    startSharing()
-                } else {
+                    startSharing(chosenList)
+                }
+                else {
                     val msg = getString(R.string.toast_internet_baglantisi_yok)
                     toastMessages.showToastShort(msg)
                 }
@@ -108,10 +115,11 @@ class UploadPageFragment : Fragment() {
      */
 
     // View modeli kullanarak paylaşımı başlat
-    private fun startSharing() {
-         viewModel.uploadChosenPDF(pdfUri!!, pdfBitmap, articleName!!, articleDescription!!)
+    private fun startSharing(chosenCategories: ArrayList<String>) {
+         viewModel.uploadChosenPDF(pdfUri!!, pdfBitmap, articleName!!, articleDescription!!, chosenCategories)
     }
 
+    // Gözlemci
     private fun observer() {
         viewModel.isLoading.observe(viewLifecycleOwner) {
             if (it) {
@@ -137,6 +145,7 @@ class UploadPageFragment : Fragment() {
         }
     }
 
+    // Bazı ayarlar
     private fun someSettings() {
 
         val artNameTxt = binding.paylasilanMakaleAdi
@@ -154,6 +163,31 @@ class UploadPageFragment : Fragment() {
 
         binding.shareButton.isEnabled = true
         binding.loadingScreen.visibility = View.GONE
+    }
+
+    // CheckBox kontrolleri
+    private fun checkboxChecker(): ArrayList<String> {
+        val box1 = binding.checkBoxFelsefe
+        val box2 = binding.checkBoxKisisel
+        val box3 = binding.checkBoxPolitik
+        val box4 = binding.checkBoxTeknoloji
+        val box5 = binding.checkBoxTeoloji
+        val box6 = binding.checkBoxAkademik
+        val box7 = binding.checkBoxElestiri
+
+        val list = listOf(box1, box2, box3, box4, box5, box6, box7)
+        val checkedList = list.filter { it.isChecked }
+
+        val chosenCategories = ArrayList<String>()
+        if (checkedList.size >= 3) {
+            checkedList.forEach {
+                chosenCategories.add(it.text.toString())
+            }
+             return chosenCategories
+        }
+        else {
+            return arrayListOf()
+        }
     }
 
 //===================================PDF-SEÇİM-İŞLEMLERİ============================================

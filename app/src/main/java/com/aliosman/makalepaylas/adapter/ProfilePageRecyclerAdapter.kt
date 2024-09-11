@@ -2,6 +2,7 @@ package com.aliosman.makalepaylas.adapter
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -57,8 +58,13 @@ class ProfilePageRecyclerAdapter(private var pdfList: ArrayList<ProfilePagePdfIn
     }
 
     fun deleteItem(position: Int) {
-        pdfList.removeAt(position)
-        notifyItemRemoved(position)
+        if (position >= 0 && position < pdfList.size) {
+            pdfList.removeAt(position)
+            notifyItemRemoved(position)
+        } else {
+            Log.e("ProfilePageRecyclerAdapter", "Geçersiz pozisyon: $position")
+        }
     }
+
 }
 

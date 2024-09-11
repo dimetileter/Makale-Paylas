@@ -15,7 +15,7 @@ android {
         minSdk = 28
         targetSdk = 34
         versionCode = 1
-        versionName = "Beta 1.1.7 - Veri alma işlemleri"
+        versionName = "Beta 1.1.8 - Genele Hazır"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 

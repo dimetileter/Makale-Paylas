@@ -156,6 +156,7 @@ class ProfilePageViewModel(private val application: Application): AndroidViewMod
                         takenPdf.value = arrayListOf()
                         val msg = application.getString(R.string.toast_paylasim_yok)
                         ToastMessages(application).showToastLong(msg)
+                        Log.d("Profil gönderileri alınamadı", "Profil sayfası pdf verileri alınamadı")
                     }
                 }
             } catch (e: Exception) {

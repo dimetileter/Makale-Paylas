@@ -1,11 +1,13 @@
 package com.aliosman.makalepaylas.login
 
 import android.Manifest
+import android.app.DatePickerDialog
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.ImageDecoder
+import android.icu.util.Calendar
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -32,6 +34,7 @@ class SignUpPageFragment : Fragment() {
     private var _binding: FragmentSignUpPageBinding? = null
     private val binding get() = _binding!!
     private lateinit var userInfos: Array<String> // email, uıd
+    private lateinit var datePicker: DatePickerDialog
 
     private lateinit var permissionLauncher: ActivityResultLauncher<String>
     private lateinit var activityResultLauncher: ActivityResultLauncher<Intent>
@@ -71,6 +74,10 @@ class SignUpPageFragment : Fragment() {
 
         binding.profilePicture.setOnClickListener {
             checkGalleryPermission()
+        }
+
+        binding.txtBirthDate.setOnClickListener {
+            dateTimePicker()
         }
     }
 
@@ -206,6 +213,38 @@ class SignUpPageFragment : Fragment() {
     {
         val action = SignUpPageFragmentDirections.actionSignUpPageFragmentToSignUp2Fragment(userIfos, profilePictureURI)
         Navigation.findNavController(binding.root).navigate(action)
+    }
+
+    // Tarih Seçici
+    private fun dateTimePicker() {
+        val calender = Calendar.getInstance()
+        val year = calender.get(Calendar.YEAR)
+        val month = calender.get(Calendar.MONTH)
+        val day = calender.get(Calendar.DAY_OF_MONTH)
+
+        datePicker = DatePickerDialog(
+            requireContext(),
+            R.style.CustomDatePickerDialogTheme,
+            { _, selectedYear, selectedMonth, selectedDayOfMonth ->
+                // Seçilen tarih burada işlenecek
+                val selectedDate = "$selectedDayOfMonth/${selectedMonth + 1}/$selectedYear"
+                binding.txtBirthDate.text = selectedDate
+                // Seçilen tarihi kullan
+            },
+            year,
+            month,
+            day
+        )
+
+        datePicker.setOnShowListener {
+            val positiveButton = datePicker.getButton(DatePickerDialog.BUTTON_POSITIVE)
+            val negativeButton = datePicker.getButton(DatePickerDialog.BUTTON_NEGATIVE)
+
+            positiveButton.setTextColor(ContextCompat.getColor(requireContext(), R.color.next_button))
+            negativeButton.setTextColor(ContextCompat.getColor(requireContext(), R.color.next_button))
+        }
+
+        datePicker.show()
     }
 
     override fun onDestroyView()

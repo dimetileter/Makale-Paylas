@@ -6,10 +6,14 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
+import android.graphics.Typeface
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
+import android.text.SpannableStringBuilder
+import android.text.Spanned
 import android.text.method.ScrollingMovementMethod
+import android.text.style.StyleSpan
 import android.view.View
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -22,9 +26,7 @@ import androidx.room.Room
 import com.aliosman.makalepaylas.R
 import com.aliosman.makalepaylas.activities.viewmodel.DownloadPageViewModel
 import com.aliosman.makalepaylas.databinding.ActivityDownloadPageBinding
-import com.aliosman.makalepaylas.model.HomePagePdfInfo
 import com.aliosman.makalepaylas.roomdb.homeroom.TakenHomePdfDatabase
-import com.aliosman.makalepaylas.ui.home.HomePageFragment
 import com.aliosman.makalepaylas.util.ToastMessages
 import com.aliosman.makalepaylas.util.downloadImage
 import com.aliosman.makalepaylas.util.isInternetAvailable
@@ -159,8 +161,9 @@ class DownloadPageActivity : AppCompatActivity() {
             }
             else {
                 pdfUrl = it[0] // Url'yi al
-                binding.txtArticleDescription.text = it[1] // Açıklamayı al
+                binding.txtArticleDescription.text = it [1]
                 binding.downloadPageDate.text = it[2] // Tarihi al
+                binding.txtCategories.text = it[3]
             }
         }
     }
